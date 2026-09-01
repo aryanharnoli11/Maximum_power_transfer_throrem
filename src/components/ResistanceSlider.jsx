@@ -1,0 +1,104 @@
+import { useState } from 'react'
+import {
+  formatKilohms,
+  RESISTANCE_SLIDER_CONFIG,
+} from '../utils/resistance.js'
+
+const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
+  const isRL = label === 'RL'
+  const config = isRL
+    ? RESISTANCE_SLIDER_CONFIG.load
+    : RESISTANCE_SLIDER_CONFIG.network
+  const discreteValues = config.values ?? null
+
+  const normalizeResistance = (inputValue) => {
+    const number = Number(inputValue)
+
+    if (discreteValues) {
+      return discreteValues.reduce((closest, option) => (
+        Math.abs(option - number) < Math.abs(closest - number)
+          ? option
+          : closest
+      ), discreteValues[0])
+    }
+
+    const bounded = Math.min(
+      Math.max(
+        Number.isFinite(number) ? number : config.min,
+        config.min,
+      ),
+      config.max,
+    )
+
+    return bounded
+  }
+
+  const [draftValue, setDraftValue] = useState(value)
+  const [isEditing, setIsEditing] = useState(false)
+
+  const sliderValue = isEditing ? draftValue : value
+  const sliderPosition = discreteValues
+    ? discreteValues.indexOf(normalizeResistance(sliderValue))
+    : sliderValue
+  const sliderMin = discreteValues ? 0 : config.min
+  const sliderMax = discreteValues ? discreteValues.length - 1 : config.max
+  const sliderStep = discreteValues ? 1 : config.step
+
+  const commitValue = () => {
+    const committedValue = normalizeResistance(sliderValue)
+
+    setDraftValue(committedValue)
+    setIsEditing(false)
+    onChange(committedValue)
+  }
+
+  return (
+    <div className={`resistance-slider ${disabled ? 'resistance-slider--locked' : ''}`}>
+      <label className="resistance-slider__label" htmlFor={`${label}-slider`}>
+        {label.slice(0, 1)}
+        <sub>{label.slice(1)}</sub> ({isRL ? '' : 'k'}&Omega;)
+      </label>
+
+      <div className="resistance-slider__control">
+        <input
+          aria-label={`${label} resistance`}
+          aria-valuetext={`${sliderValue} ohms`}
+          className="resistance-slider__input"
+          disabled={disabled}
+          id={`${label}-slider`}
+          max={sliderMax}
+          min={sliderMin}
+          onBlur={commitValue}
+          onChange={(event) => {
+            setIsEditing(true)
+            const nextPosition = Number(event.target.value)
+            setDraftValue(
+              discreteValues
+                ? discreteValues[nextPosition]
+                : nextPosition,
+            )
+          }}
+          onKeyUp={commitValue}
+          onPointerCancel={commitValue}
+          onPointerUp={commitValue}
+          step={sliderStep}
+          type="range"
+          value={sliderPosition}
+        />
+        {discreteValues ? (
+          <div aria-hidden="true" className="resistance-slider__ticks">
+            {discreteValues.map((option) => (
+              <span key={option} title={`${option} ohms`} />
+            ))}
+          </div>
+        ) : null}
+      </div>
+
+      <span className="resistance-slider__value">
+        {isRL ? sliderValue : Number(formatKilohms(sliderValue, 0))}
+      </span>
+    </div>
+  )
+}
+
+export default ResistanceSlider

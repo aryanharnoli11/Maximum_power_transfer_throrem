@@ -1,0 +1,46 @@
+import ObservationTable from './ObservationTable.jsx'
+import ReportControls from './ReportControls.jsx'
+import ResistanceSlider from './ResistanceSlider.jsx'
+import SectionCard from './SectionCard.jsx'
+
+const ControlPanel = ({
+  locked,
+  minReadings,
+  onGenerateReport,
+  observations,
+  readingCount,
+  reportGenerated,
+  rl,
+  setRl,
+}) => (
+  <>
+    <SectionCard
+      className="h-[104px]"
+      icon="sliders"
+      id="resistance-controls"
+      title="RESISTANCE SLIDER"
+    >
+      <div className="flex flex-col gap-[14.4px] px-[20.8px] pt-[20.8px]">
+
+        <ResistanceSlider
+          disabled={locked}
+          label="RL"
+          onChange={setRl}
+          value={rl}
+        />
+
+      </div>
+    </SectionCard>
+
+    <ObservationTable observations={observations} />
+
+    <ReportControls
+      minReadings={minReadings}
+      onGenerateReport={onGenerateReport}
+      readingCount={readingCount}
+      reportGenerated={reportGenerated}
+    />
+  </>
+)
+
+export default ControlPanel
