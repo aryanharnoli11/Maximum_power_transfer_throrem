@@ -13,6 +13,12 @@ export const LOAD_RESISTANCE_VALUES = [
   1000,
 ]
 
+export const FIXED_NETWORK_RESISTANCES = {
+  r1: 466,
+  r2: 216,
+  r3: 470,
+}
+
 export const RESISTANCE_SLIDER_CONFIG = {
   load: {
     initial: LOAD_RESISTANCE_VALUES[0],
@@ -20,12 +26,6 @@ export const RESISTANCE_SLIDER_CONFIG = {
     min: LOAD_RESISTANCE_VALUES[0],
     step: null,
     values: LOAD_RESISTANCE_VALUES,
-  },
-  network: {
-    initial: 1000,
-    max: 5000,
-    min: 1000,
-    step: 1000,
   },
 }
 

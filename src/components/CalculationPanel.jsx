@@ -237,40 +237,40 @@ const calculatedLoadCurrentDisplay =
                 <span className="inline-label">R<sub>1</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r1 !== ''
-                    ? formatCompactNumber(ohmsToKilohms(r1), 0)
+                    ? formatCompactNumber(r1, 0)
                     : ''}
                 </div>
-                <span className="inline-unit">kΩ</span>
+                <span className="inline-unit">Ω</span>
               </div>
               
               <div className="inline-input-item">
                 <span className="inline-label">R<sub>2</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r2 !== ''
-                    ? formatCompactNumber(ohmsToKilohms(r2), 0)
+                    ? formatCompactNumber(r2, 0)
                     : ''}
                 </div>
-                <span className="inline-unit">kΩ</span>
+                <span className="inline-unit">Ω</span>
               </div>
               
               <div className="inline-input-item">
                 <span className="inline-label">R<sub>3</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r3 !== ''
-                    ? formatCompactNumber(ohmsToKilohms(r3), 0)
+                    ? formatCompactNumber(r3, 0)
                     : ''}
                 </div>
-                <span className="inline-unit">kΩ</span>
+                <span className="inline-unit">Ω</span>
               </div>
 
               <div className="inline-input-item">
                 <span className="inline-label">R<sub>L</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && rl !== ''
-                    ? formatCompactNumber(ohmsToKilohms(rl), 1)
+                    ? formatCompactNumber(rl, 0)
                     : ''}
                 </div>
-                <span className="inline-unit">kΩ</span>
+                <span className="inline-unit">Ω</span>
               </div>
             </div>
           </div>
@@ -336,7 +336,7 @@ const calculatedLoadCurrentDisplay =
                     onChange={(event) => handleTheveninInputChange('vth', event.target.value)}
                     onKeyDown={preventInvalidNumberKey}
                     onWheel={preventMouseWheelAdjustment}
-                    placeholder="0 - 100"
+                    placeholder="Enter Value"
                     step="0.01"
                     title="Enter a value from 0 to 100 V"
                     type="number"
@@ -358,7 +358,7 @@ const calculatedLoadCurrentDisplay =
                       onChange={(event) => handleTheveninInputChange('rth', event.target.value)}
                       onKeyDown={preventInvalidNumberKey}
                       onWheel={preventMouseWheelAdjustment}
-                      placeholder="0 - 50"
+                      placeholder="Enter Value"
                       step="0.01"
                       title="Enter a value from 0 to 50 kΩ"
                       type="number"
@@ -380,7 +380,7 @@ const calculatedLoadCurrentDisplay =
                       onChange={(event) => handleTheveninInputChange('rl', event.target.value)}
                       onKeyDown={preventInvalidNumberKey}
                       onWheel={preventMouseWheelAdjustment}
-                      placeholder="0 - 5"
+                      placeholder="Enter Value"
                       step="0.01"
                       title="Enter a value from 0 to 5 kΩ"
                       type="number"

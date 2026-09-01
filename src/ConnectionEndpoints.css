@@ -367,8 +367,8 @@
 }
 
 .connection-terminal--endpoint-3 {
-  --terminal-base-top: 181.6px;
-  --terminal-base-left: 53.6px;
+  --terminal-base-top: 179.6px;
+  --terminal-base-left: 52.6px;
 }
 
 .connection-lab .jtk-endpoint--terminal-4,
@@ -378,7 +378,7 @@
 }
 
 .connection-terminal--endpoint-4 {
-  --terminal-base-top: 181.6px;
+  --terminal-base-top: 179.6px;
   --terminal-base-left: 140.8px;
 }
 

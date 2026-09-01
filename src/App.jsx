@@ -12,7 +12,10 @@ import CalculationPanel from './components/CalculationPanel.jsx'
 import { useWalkthrough } from './walkthrough/useWalkthrough.js'
 import { calculateReadings } from './utils/circuitMath.js'
 import { generateTheveninReport } from './utils/theveninReportGenerator.js'
-import { RESISTANCE_SLIDER_CONFIG } from './utils/resistance.js'
+import {
+  FIXED_NETWORK_RESISTANCES,
+  RESISTANCE_SLIDER_CONFIG,
+} from './utils/resistance.js'
 
 const BASE_WIDTH = 1152
 const DEFAULT_CONTENT_HEIGHT = 1440
@@ -61,9 +64,7 @@ const App = () => {
     devicePixelRatio: typeof window === 'undefined' ? 1 : window.devicePixelRatio,
     outerWidth: typeof window === 'undefined' ? BASE_WIDTH : window.outerWidth,
   })
-  const r1 = RESISTANCE_SLIDER_CONFIG.network.initial
-  const r2 = RESISTANCE_SLIDER_CONFIG.network.initial
-  const r3 = RESISTANCE_SLIDER_CONFIG.network.initial
+  const { r1, r2, r3 } = FIXED_NETWORK_RESISTANCES
   const [rl, setRl] = useState(RESISTANCE_SLIDER_CONFIG.load.initial)
   const [resistanceSelections, setResistanceSelections] = useState({
     rl: false,

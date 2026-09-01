@@ -1,5 +1,4 @@
 import { amperesToMilliamperes } from './current.js'
-import { formatKilohms } from './resistance.js'
 
 // Edit these values to change the fixed text shown in the generated report.
 const REPORT_CONTENT = {
@@ -11,7 +10,7 @@ const REPORT_CONTENT = {
   simulationSummary: "The guided walkthrough familiarised the user with the simulation interface. The resistance values were selected, and the Thevenin resistance (Rth) was measured using the digital multimeter. The Thevenin voltage (Vth) was then measured using the voltmeter, followed by measurement of the load current (IL) using the ammeter. All measured readings were recorded in the observation table. Thereafter, the theoretical value of the load current was calculated using Thevenin's Theorem and compared with the measured value to verify the theorem.",
   apparatus: [
     ['Power Supply: 15V DC', 'AC/DC Voltmeter: 0 - 50 V', 'AC/DC Ammeter: 0 - 5 mA', 'Digital Multimeter', 'RL: 0 Ω - 1000 Ω'],
-    ['Fixed network resistors R₁, R₂ and R₃', 'Connecting Leads'],
+    ['R₁: 466 Ω', 'R₂: 216 Ω', 'R₃: 470 Ω', 'Connecting Leads'],
   ],
   conclusion: "Thevenin's Theorem has been verified successfully. The measured load current matches the theoretical value for the given resistive DC circuit.",
   footer: '© 2026 Virtual Labs, IIT Roorkee',
@@ -856,15 +855,15 @@ tr:nth-child(even) {
         <div class="param-grid">
           <div class="param-card">
             <span class="param-label">R<sub>1</sub></span>
-            <span class="param-value">${formatKilohms(r1, 0)} k&Omega;</span>
+            <span class="param-value">${Number(r1).toFixed(0)} &Omega;</span>
           </div>
           <div class="param-card">
             <span class="param-label">R<sub>2</sub></span>
-            <span class="param-value">${formatKilohms(r2, 0)} k&Omega;</span>
+            <span class="param-value">${Number(r2).toFixed(0)} &Omega;</span>
           </div>
           <div class="param-card">
             <span class="param-label">R<sub>3</sub></span>
-            <span class="param-value">${formatKilohms(r3, 0)} k&Omega;</span>
+            <span class="param-value">${Number(r3).toFixed(0)} &Omega;</span>
           </div>
           <div class="param-card">
             <span class="param-label">R<sub>L</sub></span>

@@ -512,23 +512,6 @@
   box-shadow: 0 1.6px 3.2px rgba(0, 0, 0, 0.48);
 }
 
-.resistance-slider__ticks {
-  position: absolute;
-  top: 15.2px;
-  left: -7.2px;
-  display: flex;
-  width: 198.4px;
-  justify-content: space-between;
-  pointer-events: none;
-}
-
-.resistance-slider__ticks span {
-  width: 1.6px;
-  height: 4.8px;
-  border-radius: 0 0 1.6px 1.6px;
-  background: rgba(74, 41, 18, 0.7);
-}
-
 .resistance-slider__value {
   display: grid;
   width: 43.2px;
@@ -818,7 +801,7 @@
   overflow: visible;
   --ammeter-image-scale: 1;
   --ammeter-image-top: 0;
-  --ammeter-needle-top: 92px;
+  --ammeter-needle-top: 88px;
   --ammeter-needle-left: 55.2px;
   --ammeter-needle-width: 72px;
   --ammeter-needle-height: 72px;
@@ -842,7 +825,7 @@
 }
 
 .ammeter--A1 {
-  --ammeter-needle-top: 88.3px;
+  --ammeter-needle-top: 83.3px;
   --ammeter-needle-left: 59.4px;
   --ammeter-needle-width: 70.4px;
   --ammeter-needle-height: 73.6px;
@@ -1050,6 +1033,25 @@
   width: 95%;
   height: 100%;
   object-fit: fill;
+}
+
+.load-resistance-arrow {
+  position: absolute;
+  top: 160.6px;
+  left: 355.6px;
+  z-index: 1;
+  width: 50px;
+  height: 50px;
+  overflow: visible;
+  color: #aebfff;
+  pointer-events: none;
+}
+
+.load-resistance-arrow line {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 3.2px;
 }
 
 .resistor-value {

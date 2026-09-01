@@ -224,7 +224,7 @@ const ActionButtons = ({
 
   <li {...getInstructionProps('step1')}>
     <strong>STEP 1:</strong>{' '}
-    <ElectricalText text="Set the value of RL using the resistance slider. R1, R2 and R3 are fixed." />
+    <ElectricalText text="Set RL using the resistance slider. R1, R2 and R3 are fixed at 466 Ω, 216 Ω and 470 Ω." />
   </li>
 
   <li>

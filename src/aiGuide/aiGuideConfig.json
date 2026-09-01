@@ -10,7 +10,7 @@
     },
     {
       "id": 2,
-      "text": "The simulation walkthrough is now complete. You are now ready to perform the experiment. First set RL using the resistance slider. R1, R2 and R3 are fixed.",
+      "text": "The simulation walkthrough is now complete. You are now ready to perform the experiment. First set RL using the resistance slider. R1, R2 and R3 are fixed at 466 ohms, 216 ohms and 470 ohms.",
       "audio": "/audios/The simulation walkthrough is now complete.wav"
     },
     {

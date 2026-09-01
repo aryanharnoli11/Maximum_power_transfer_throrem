@@ -20,7 +20,7 @@ const ControlPanel = ({
       id="resistance-controls"
       title="RESISTANCE SLIDER"
     >
-      <div className="flex flex-col gap-[14.4px] px-[20.8px] pt-[20.8px]">
+      <div className="flex flex-col gap-[14.4px] px-[20.8px] pt-[30.8px]">
 
         <ResistanceSlider
           disabled={locked}

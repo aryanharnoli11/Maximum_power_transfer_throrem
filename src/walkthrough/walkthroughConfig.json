@@ -117,7 +117,7 @@
     "en": "Resistance Slider"
   },
   "description": {
-    "en": "Set RL by moving the resistance slider. R1, R2 and R3 are fixed.\n\n**RL divisions:** 0, 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω."
+    "en": "Set RL by moving the resistance slider. R1, R2 and R3 are fixed at 466 Ω, 216 Ω and 470 Ω.\n\n**RL divisions:** 0, 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω."
   },
    "audio": "/walkthrough-audios/Resistance Sliders.wav",
   "placement": "right"

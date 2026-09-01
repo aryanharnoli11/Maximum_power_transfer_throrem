@@ -1,14 +1,8 @@
 import { useState } from 'react'
-import {
-  formatKilohms,
-  RESISTANCE_SLIDER_CONFIG,
-} from '../utils/resistance.js'
+import { RESISTANCE_SLIDER_CONFIG } from '../utils/resistance.js'
 
 const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
-  const isRL = label === 'RL'
-  const config = isRL
-    ? RESISTANCE_SLIDER_CONFIG.load
-    : RESISTANCE_SLIDER_CONFIG.network
+  const config = RESISTANCE_SLIDER_CONFIG.load
   const discreteValues = config.values ?? null
 
   const normalizeResistance = (inputValue) => {
@@ -56,7 +50,7 @@ const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
     <div className={`resistance-slider ${disabled ? 'resistance-slider--locked' : ''}`}>
       <label className="resistance-slider__label" htmlFor={`${label}-slider`}>
         {label.slice(0, 1)}
-        <sub>{label.slice(1)}</sub> ({isRL ? '' : 'k'}&Omega;)
+        <sub>{label.slice(1)}</sub> (&Omega;)
       </label>
 
       <div className="resistance-slider__control">
@@ -85,17 +79,10 @@ const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
           type="range"
           value={sliderPosition}
         />
-        {discreteValues ? (
-          <div aria-hidden="true" className="resistance-slider__ticks">
-            {discreteValues.map((option) => (
-              <span key={option} title={`${option} ohms`} />
-            ))}
-          </div>
-        ) : null}
       </div>
 
       <span className="resistance-slider__value">
-        {isRL ? sliderValue : Number(formatKilohms(sliderValue, 0))}
+        {sliderValue}
       </span>
     </div>
   )
