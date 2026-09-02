@@ -286,7 +286,7 @@ readingAddedCase2: {
  calculationReady: {
   audio: ALERT_AUDIO.calculate,
   description:
-         'The observed values are displayed in the Calculations Panel. Enter the Thevenin equivalent resistance and voltage to calculate the load current automatically, then click the Verify button to compare it with the observed current.',
+         'The power graph and circuit values are displayed in the Calculations Panel. Enter the Thevenin voltage and resistance to calculate maximum power, then click the Verify button.',
 
   icon: '🧮',
   stepNumber: 7,

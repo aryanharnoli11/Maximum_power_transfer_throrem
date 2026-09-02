@@ -66,7 +66,7 @@ const App = () => {
   const [observations, setObservations] = useState([])
   const [calculationDone, setCalculationDone] = useState(false)
   const [calculatedValues, setCalculatedValues] = useState(null)
-  const [userCalculatedIL, setUserCalculatedIL] = useState('')
+  const [userCalculatedPmax, setUserCalculatedPmax] = useState('')
   const [verificationResult, setVerificationResult] = useState('')
   const [experimentCase, setExperimentCase] = useState(1)
   const [measuredRth, setMeasuredRth] = useState(null)
@@ -442,7 +442,7 @@ const App = () => {
     setCalculationDone(false)
     setCalculatedValues(null)
     setVerificationResult('')
-    setUserCalculatedIL('')
+    setUserCalculatedPmax('')
     setReportGenerated(false)
     setReportPrinted(false)
     setCheckRequest(0)
@@ -505,7 +505,7 @@ const App = () => {
       rl,
       vth: calculatedValues?.vth ?? 0,
       rth: calculatedValues?.rth ?? 0,
-      calculatedIL: Number(userCalculatedIL),
+      calculatedPmax: Number(userCalculatedPmax),
       sessionStart,
     })
 
@@ -799,8 +799,9 @@ const App = () => {
               calculatedValues={calculatedValues}
               calculationDone={calculationDone}
               key={calculationDone ? 'calculation-ready' : 'calculation-reset'}
+              observations={observations}
               onGuideEvent={notifyGuide}
-              setUserCalculatedIL={setUserCalculatedIL}
+              setUserCalculatedPmax={setUserCalculatedPmax}
               setVerificationResult={setVerificationResult}
               verificationResult={verificationResult}
             />

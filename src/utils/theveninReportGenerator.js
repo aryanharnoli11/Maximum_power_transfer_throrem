@@ -2,17 +2,17 @@ import { amperesToMilliamperes } from './current.js'
 
 // Edit these values to change the fixed text shown in the generated report.
 const REPORT_CONTENT = {
-  documentTitle: 'Thevenin Simulation Report',
+  documentTitle: 'Maximum Power Transfer Simulation Report',
   reportHeading: 'Virtual Labs Simulation Report',
   labName: 'AI-Enhanced Basic Electrical Science Lab',
-  experimentTitle: "TO VERIFY THEVENIN'S THEOREM",
-  aim: "To study and verify Thevenin's Theorem by replacing a linear electrical network with its equivalent voltage source and equivalent resistance and validating the load current obtained through the Thevenin equivalent circuit.",
-  simulationSummary: "The guided walkthrough familiarised the user with the simulation interface. The resistance values were selected, and the Thevenin resistance (Rth) was measured using the digital multimeter. The Thevenin voltage (Vth) was then measured using the voltmeter, followed by measurement of the load current (IL) using the ammeter. All measured readings were recorded in the observation table. Thereafter, the theoretical value of the load current was calculated using Thevenin's Theorem and compared with the measured value to verify the theorem.",
+  experimentTitle: 'TO VERIFY MAXIMUM POWER TRANSFER THEOREM',
+  aim: 'To study and verify the Maximum Power Transfer Theorem by varying the load resistance and comparing the measured load power with the theoretical maximum power.',
+  simulationSummary: 'The Thevenin resistance and voltage were measured first. The load resistance was then varied through the specified values, and the corresponding load current and power were recorded. A power-versus-load-resistance graph was plotted and the theoretical maximum power was calculated using Pmax = Vth² / (4 × Rth).',
   apparatus: [
     ['Power Supply: 15V DC', 'AC/DC Voltmeter: 0 - 50 V', 'AC/DC Ammeter: 0 - 5 mA', 'Digital Multimeter', 'RL: 0 Ω - 1000 Ω'],
     ['R₁: 466 Ω', 'R₂: 216 Ω', 'R₃: 470 Ω', 'Connecting Leads'],
   ],
-  conclusion: "Thevenin's Theorem has been verified successfully. The measured load current matches the theoretical value for the given resistive DC circuit.",
+  conclusion: 'The Maximum Power Transfer Theorem has been verified successfully. Maximum load power occurs when the load resistance is equal to the Thevenin resistance of the source network.',
   footer: '© 2026 Virtual Labs, IIT Roorkee',
 }
 
@@ -29,7 +29,7 @@ export const generateTheveninReport = ({
   r2,
   r3,
   rl,
-  calculatedIL,
+  calculatedPmax,
   sessionStart,
 }) => {
   const iitLogoSrc =
@@ -905,8 +905,8 @@ tr:nth-child(even) {
             <h3>Theoretical Verification</h3>
             <div class="calc-block">
               <div class="calc-row">
-                <span class="calc-label">Calculated Load Current (I<sub>L</sub>):</span>
-                <span class="calc-value">${calculatedIL.toFixed(3)} mA</span>
+                <span class="calc-label">Calculated Maximum Power (P<sub>max</sub>):</span>
+                <span class="calc-value">${calculatedPmax.toFixed(3)} mW</span>
               </div>
             </div>
           </div>

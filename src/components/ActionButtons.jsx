@@ -271,12 +271,12 @@ const ActionButtons = ({
 
   <li {...getInstructionProps('step3')}>
     <strong>STEP 3:</strong>{' '}
-    <ElectricalText text="Click CALCULATE to calculate load current (IL)." />
+    <ElectricalText text="Click CALCULATE to display the power graph and maximum-power calculation." />
   </li>
 
   <li {...getInstructionProps('step4')}>
     <strong>STEP 4:</strong>{' '}
-    <ElectricalText text="Enter RTH and VTH to calculate IL automatically, then click VERIFY." />
+    <ElectricalText text="Enter VTH and RTH to calculate maximum power, then click VERIFY." />
   </li>
 
   <li {...getInstructionProps('step5')}>

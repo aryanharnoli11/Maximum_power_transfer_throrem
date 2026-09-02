@@ -29,6 +29,11 @@ const formulaSections = [
     id: 'il',
     steps: [],
   },
+  {
+    description: 'Maximum load power is delivered when the load resistance equals the Thevenin resistance of the source network.',
+    id: 'pmax',
+    steps: [],
+  },
 ]
 
 const FormulaFraction = ({ denominator, numerator }) => (
@@ -73,6 +78,19 @@ const FormulaEquation = ({ formulaId }) => {
     )
   }
 
+  if (formulaId === 'pmax') {
+    return (
+      <span
+        aria-label="Maximum power equals Thevenin voltage squared divided by four times Thevenin resistance"
+        className="floating-formula-panel__equation-row"
+      >
+        <ElectricalText text="Pmax" />
+        <span aria-hidden="true">=</span>
+        <FormulaFraction numerator="VTH²" denominator="4 × RTH" />
+      </span>
+    )
+  }
+
   return (
     <span
       aria-label="I L equals V T H divided by R T H plus R L"
@@ -106,7 +124,7 @@ const ReportControls = ({
       >
 
         <div className="floating-formula-panel__header">
-          <h3 id="formula-panel-title">Thevenin Theorem Equations</h3>
+          <h3 id="formula-panel-title">Maximum Power Transfer Equations</h3>
           <button
             aria-label="Close equations panel"
             className="floating-formula-panel__close"

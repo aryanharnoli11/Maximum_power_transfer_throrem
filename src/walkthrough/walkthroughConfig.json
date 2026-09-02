@@ -83,7 +83,7 @@
     "en": "Calculate Button"
   },
   "description": {
-    "en": "The CALCULATE button auto-fills the resistance and source values in the Calculation Panel. For verification, you have to manually calculate the load current using the Thevenin theorem concept and verify it using the VERIFY button."
+    "en": "The CALCULATE button displays the power versus load-resistance graph and fills the circuit values in the theoretical panel. Enter VTH and RTH to calculate and verify maximum power."
   },
   "audio": "/walkthrough-audios/calculate button.wav",
   "placement": "right"
@@ -207,7 +207,7 @@
     "en": "Calculation Panel"
   },
   "description": {
-    "en": "This is the theoretical verification panel where the Thevenin Theorem will be verified. Enter the required values and compare the calculated load current with the measured load current to verify the theorem."
+    "en": "This section contains the power versus load-resistance graph and the theoretical maximum-power calculation. Enter VTH and RTH, then verify the calculated Pmax value."
   },
    "audio": "/walkthrough-audios/Calculation Panel.wav",
   "placement": "top"

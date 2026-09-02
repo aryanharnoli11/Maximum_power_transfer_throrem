@@ -425,6 +425,23 @@
   padding: 0;
 }
 
+.action-instructions-panel__substeps > li > ul {
+  display: grid;
+  gap: 2.4px;
+  margin: 4.8px 0 0;
+  padding-left: 17.6px;
+  list-style: disc outside;
+}
+
+.action-instructions-panel__substeps > li > ul > li {
+  padding-left: 1.6px;
+}
+
+.action-instructions-panel__substeps > li > ul > li::marker {
+  color: #8d521f;
+  font-size: 0.9em;
+}
+
 .resistance-slider {
   position: relative;
   top: -24px;
@@ -537,16 +554,16 @@
 .observation-table-wrap {
   position: relative;
   z-index: 1;
-  height: 252.8px;
+  height: 260px;
   margin: 6.4px 8px 8px;
-  overflow-y: auto;
+  overflow: hidden;
   border: 0.8px solid rgba(96, 61, 35, 0.34);
   border-radius: 6.4px;
   background: rgba(255, 247, 236, 0.82);
 }
 
 .observation-table-card {
-  height: 308px;
+  height: 315.2px;
 }
 
 .observation-table {
@@ -566,9 +583,11 @@
 }
 
 .observation-table__column-headings th:last-child {
-  width: 132px;
-  padding: 2.4px 3.2px;
-  line-height: 1.15;
+  width: 160px;
+  padding: 2.4px;
+  font-size: 8.8px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .observation-table__group-headings th {
@@ -2619,6 +2638,364 @@ background:
   border-radius: 8px 8px 0 0;
 }
 
+.maximum-power-results {
+  display: grid;
+  width: 100%;
+  align-items: stretch;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 14.4px;
+}
+
+.analysis-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 0.8px solid rgba(255, 244, 221, 0.78);
+  border-radius: 14.4px;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 243, 0.99), rgba(235, 220, 197, 0.98));
+  box-shadow:
+    inset 0 0.8px 0 rgba(255, 255, 255, 0.95),
+    0 11.2px 27.2px rgba(34, 17, 8, 0.28);
+}
+
+.analysis-card__heading {
+  display: flex;
+  height: 51.2px;
+  align-items: center;
+  padding: 0 19.2px;
+  border-bottom: 0.8px solid rgba(107, 69, 36, 0.24);
+  background:
+    linear-gradient(90deg, rgba(109, 62, 30, 0.14), rgba(255, 255, 255, 0.2));
+}
+
+.analysis-card__heading h2 {
+  margin: 0;
+  color: #422719;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+}
+
+.power-load-graph-panel__body {
+  position: relative;
+  display: grid;
+  min-height: 350px;
+  place-items: center;
+  padding: 10.4px 9.6px 12.8px;
+}
+
+.power-load-graph {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.power-load-graph__plot-background {
+  fill: rgba(255, 253, 248, 0.82);
+}
+
+.power-load-graph__grid-line {
+  stroke: rgba(105, 73, 48, 0.17);
+  stroke-width: 1;
+}
+
+.power-load-graph__axis {
+  stroke: #4d2f1d;
+  stroke-width: 1.8;
+}
+
+.power-load-graph__tick-label {
+  fill: #634630;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.power-load-graph__axis-title {
+  fill: #422719;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.power-load-graph__line {
+  fill: none;
+  stroke: #086b9d;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.power-load-graph__point {
+  fill: #0d81b9;
+  stroke: #fffaf0;
+  stroke-width: 2;
+}
+
+.power-load-graph__point--peak {
+  fill: #c34e20;
+  stroke: #fff6df;
+  stroke-width: 2.5;
+}
+
+.power-load-graph__peak-label {
+  fill: #983815;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10.5px;
+  font-weight: 900;
+}
+
+.power-load-graph-panel__empty {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: 240px;
+  margin: 0;
+  padding: 9.6px 12.8px;
+  border: 0.8px solid rgba(111, 76, 43, 0.2);
+  border-radius: 6.4px;
+  color: #76583f;
+  background: rgba(255, 250, 242, 0.9);
+  font-size: 11.2px;
+  font-weight: 750;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.theoretical-calculation-panel__body {
+  display: grid;
+  gap: 12px;
+  padding: 14.4px;
+}
+
+.maximum-power-values-card,
+.maximum-power-formula-card {
+  padding: 12px 13.6px;
+  border: 0.8px solid rgba(125, 86, 49, 0.24);
+  border-radius: 8.8px;
+  background: linear-gradient(180deg, #fffdf8, #f6ead8);
+  box-shadow: inset 0 0.8px 0 #fff;
+}
+
+.maximum-power-values-card {
+  display: grid;
+  gap: 10.4px;
+}
+
+.maximum-power-values-card h3,
+.maximum-power-formula-card h3 {
+  margin: 0 0 10.4px;
+  color: #573620;
+  font-size: 12.8px;
+  font-weight: 850;
+}
+
+.maximum-power-values-card__section + .maximum-power-values-card__section {
+  padding-top: 9.6px;
+  border-top: 0.8px solid rgba(125, 86, 49, 0.2);
+}
+
+.maximum-power-values-card__resistances {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.maximum-power-values-card__source {
+  width: 100%;
+  margin-top: 0;
+}
+
+.maximum-power-values-card__source > div {
+  width: max-content;
+}
+
+.maximum-power-parameter {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+  grid-template-columns: max-content 76.8px max-content;
+  gap: 4.8px;
+}
+
+.maximum-power-parameter__label,
+.maximum-power-parameter__unit {
+  color: #4b3020;
+  font-size: 11.2px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.maximum-power-parameter__value,
+.maximum-power-result {
+  display: grid;
+  height: 28.8px;
+  place-items: center;
+  border: 0.8px solid rgba(112, 77, 44, 0.3);
+  border-radius: 5.6px;
+  color: #3e2a1f;
+  background: #fffaf1;
+  box-shadow: inset 0 0.8px 1.6px rgba(70, 40, 19, 0.08);
+  font-size: 11.2px;
+  font-weight: 800;
+}
+
+.maximum-power-values-card__source .maximum-power-parameter {
+  grid-template-columns: 86.4px 108.8px max-content;
+}
+
+.maximum-power-formula-card {
+  min-height: 142.4px;
+}
+
+.maximum-power-equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9.6px;
+  color: #342117;
+  font-family: Cambria, "Times New Roman", serif;
+  font-size: 16.8px;
+  font-weight: 700;
+}
+
+.maximum-power-equation__lead,
+.maximum-power-equation__equals,
+.maximum-power-equation__result-unit {
+  flex: 0 0 auto;
+  font-size: 18.4px;
+  white-space: nowrap;
+}
+
+.maximum-power-equation__fraction {
+  display: grid;
+  min-width: 280px;
+}
+
+.maximum-power-equation__term {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.maximum-power-equation__voltage-symbol {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 18.4px;
+  line-height: 1;
+}
+
+.maximum-power-equation__voltage-symbol sup {
+  position: relative;
+  top: -0.52em;
+  margin-left: 0.8px;
+  font-size: 0.55em;
+  line-height: 1;
+}
+
+.maximum-power-equation__voltage-symbol sub {
+  margin-left: 0.8px;
+  font-size: 0.62em;
+  line-height: 1;
+}
+
+.maximum-power-equation__numerator {
+  justify-content: center;
+  padding: 0 8px 7.2px;
+}
+
+.maximum-power-equation__denominator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.8px;
+  padding: 7.2px 8px 0;
+  border-top: 1.6px solid #4a3021;
+}
+
+.maximum-power-equation__unit {
+  color: #5c4e4b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10.4px;
+  font-weight: 750;
+}
+
+.maximum-power-input {
+  appearance: textfield;
+  box-sizing: border-box;
+  width: 84.8px;
+  height: 29.6px;
+  padding: 5.6px 6.4px;
+  border: 0.8px solid rgba(112, 77, 44, 0.38);
+  border-radius: 6.4px;
+  outline: none;
+  color: #3e2a1f;
+  background: #fffdf8;
+  box-shadow: inset 0 0.8px 1.6px rgba(70, 40, 19, 0.08);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11.2px;
+  font-weight: 650;
+  text-align: center;
+}
+
+.maximum-power-input::placeholder {
+  color: #9b8a7d;
+  font-weight: 500;
+}
+
+.maximum-power-input:focus {
+  border-color: #b9833c;
+  background: #fff;
+  box-shadow:
+    0 0 0 2.4px rgba(185, 131, 60, 0.15),
+    inset 0 0.8px 1.6px rgba(70, 40, 19, 0.06);
+}
+
+.maximum-power-input--error,
+.maximum-power-input--error:focus {
+  border-color: #dc2626;
+  background: #fff7f7;
+  animation: calculation-input-error-glow 1.1s ease-in-out infinite alternate;
+}
+
+.maximum-power-input:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.maximum-power-input::-webkit-inner-spin-button,
+.maximum-power-input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.maximum-power-result {
+  width: 76.8px;
+  flex: 0 0 auto;
+  background: #f7f1e8;
+}
+
+.maximum-power-verification {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 9.6px;
+}
+
+#calculation-panel .maximum-power-verification .verify-btn {
+  width: 134.4px;
+  height: 36.8px;
+  flex: 0 0 auto;
+  font-size: 12.8px;
+}
+
+.maximum-power-verification .verification-message {
+  max-width: 200px;
+}
+
 @page {
   size: 1152px 1134.4px;
   margin: 0;
@@ -2688,6 +3065,73 @@ background:
     top: 766.4px !important;
     width: 1152px !important;
     gap: 6.4px !important;
+  }
+
+  .maximum-power-results {
+    gap: 6.4px !important;
+  }
+
+  .analysis-card__heading {
+    height: 35.2px !important;
+    padding: 0 12.8px !important;
+  }
+
+  .analysis-card__heading h2 {
+    font-size: 13.6px !important;
+  }
+
+  .power-load-graph-panel__body {
+    min-height: 270px !important;
+    padding: 0 4.8px !important;
+  }
+
+  .power-load-graph {
+    height: 270px !important;
+  }
+
+  .theoretical-calculation-panel__body {
+    gap: 6.4px !important;
+    padding: 7.2px !important;
+  }
+
+  .maximum-power-values-card,
+  .maximum-power-formula-card {
+    padding: 6.4px 8px !important;
+  }
+
+  .maximum-power-values-card h3,
+  .maximum-power-formula-card h3 {
+    margin-bottom: 4px !important;
+  }
+
+  .maximum-power-values-card__source {
+    margin-top: 4px !important;
+  }
+
+  .maximum-power-parameter__value,
+  .maximum-power-result,
+  .maximum-power-input {
+    height: 23.2px !important;
+  }
+
+  .maximum-power-formula-card {
+    min-height: 105.6px !important;
+  }
+
+  .maximum-power-equation__numerator {
+    padding-bottom: 4px !important;
+  }
+
+  .maximum-power-equation__denominator {
+    padding-top: 4px !important;
+  }
+
+  .maximum-power-verification {
+    min-height: 27.2px !important;
+  }
+
+  #calculation-panel .maximum-power-verification .verify-btn {
+    height: 27.2px !important;
   }
 
   #calculation-panel.graph-panel--separate {

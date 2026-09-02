@@ -162,17 +162,17 @@
     },
     {
       "id": 32,
-      "text": "The resistance and source values are displayed in the theoretical verification panel. Calculate the load current manually using the rules of the Thevenin Theorem, enter the calculated values in the input field, and click the Verify button to verify the theorem.",
+      "text": "The power versus load resistance graph and the theoretical calculation panel are displayed. Enter the measured Thevenin voltage and resistance to calculate maximum power, then click Verify.",
       "audio": "/audios/After clicking the calculate button.wav"
     },
     {
       "id": 33,
-      "text": "Incorrect calculations, the Thevenin theorem could not be verified. Please review your calculations and try again.",
+      "text": "The maximum-power calculation is incorrect. Please review the entered Thevenin voltage and resistance values and try again.",
       "audio": "/audios/Verify button click, Incorrect calculations.wav"
     },
     {
       "id": 34,
-      "text": "Calculations are correct. Thevenin’s Theorem has been verified successfully. Now, click on the Generate Report button.",
+      "text": "The maximum-power calculation is correct. The Maximum Power Transfer Theorem has been verified successfully. Now, click on the Generate Report button.",
       "audio": "/audios/Verify button click, Correct calculations.wav"
     },
     {

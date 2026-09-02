@@ -1,441 +1,285 @@
-import { useEffect, useState } from 'react';
-import ElectricalText from './ElectricalText.jsx';
-import { amperesToMilliamperes } from '../utils/current.js';
-import { formatCompactNumber } from '../utils/numberFormat.js';
-import {
-  kilohmsToOhms,
-  ohmsToKilohms,
-} from '../utils/resistance.js';
-
-const INPUT_RANGES = {
-  vth: { min: 0, max: 100 },
-  rth: { min: 0, max: 50 },
-  rl: { min: 0, max: 5 },
-};
+import { useEffect, useState } from 'react'
+import ElectricalText from './ElectricalText.jsx'
+import PowerLoadGraph from './PowerLoadGraph.jsx'
+import { formatCompactNumber } from '../utils/numberFormat.js'
+import { ohmsToKilohms } from '../utils/resistance.js'
 
 const INPUT_TOLERANCES = {
-  vth: 0.005,
   rth: 0.005,
-  rl: 0.05,
-};
+  vth: 0.005,
+}
 
-const LOAD_CURRENT_TOLERANCE_MILLIAMPERES = 0.01;
-const COMPARISON_EPSILON = 1e-9;
-
-const isWithinRange = (value, range) => (
-  Number.isFinite(value) && value >= range.min && value <= range.max
-);
+const COMPARISON_EPSILON = 1e-9
 
 const approximatelyEquals = (value, expected, tolerance) => (
   Number.isFinite(expected)
   && Math.abs(value - expected) <= tolerance + COMPARISON_EPSILON
-);
-
-const clampInputToRange = (value, range) => {
-  if (value === '') return '';
-
-  const numericValue = Number(value);
-
-  if (!Number.isFinite(numericValue)) return '';
-  if (numericValue < range.min) return String(range.min);
-  if (numericValue > range.max) return String(range.max);
-
-  return value;
-};
-
-const preventInvalidNumberKey = (event) => {
-  if (['-', '+', 'e', 'E'].includes(event.key)) {
-    event.preventDefault();
-  }
-};
+)
 
 const preventMouseWheelAdjustment = (event) => {
-  event.currentTarget.blur();
-};
+  event.currentTarget.blur()
+}
 
 const CalculationPanel = ({
   calculationDone,
   calculatedValues,
-  verificationResult,
-  setUserCalculatedIL,
-  setVerificationResult,
+  observations,
   onGuideEvent,
+  setUserCalculatedPmax,
+  setVerificationResult,
+  verificationResult,
 }) => {
-  // Extracting basic parameters from calculatedValues
-  const r1 = calculatedValues?.r1 ?? '';
-  const r2 = calculatedValues?.r2 ?? '';
-  const r3 = calculatedValues?.r3 ?? '';
-  const voltageSource = calculatedValues?.voltageSource ?? '';
-
-  // Extracting recorded load parameters
-  const rl = calculatedValues?.rl ?? '';
-  const observedIL = calculatedValues?.observedIL ?? '';
-
+  const r1 = calculatedValues?.r1 ?? ''
+  const r2 = calculatedValues?.r2 ?? ''
+  const r3 = calculatedValues?.r3 ?? ''
+  const voltageSource = calculatedValues?.voltageSource ?? ''
   const [theveninInputs, setTheveninInputs] = useState({
     rth: '',
     vth: '',
-    rl: '',
-  });
+  })
   const [incorrectInputs, setIncorrectInputs] = useState({
     rth: false,
     vth: false,
-    rl: false,
-  });
-  const [calculatedCurrentIncorrect, setCalculatedCurrentIncorrect] = useState(false);
-
+  })
   const missingInputKeys = Object.entries(theveninInputs)
     .filter(([, value]) => value.trim() === '')
-    .map(([parameter]) => parameter);
-  const hasTheveninInputs = missingInputKeys.length === 0;
-  const enteredRthKilohms = Number(theveninInputs.rth);
-  const enteredVth = Number(theveninInputs.vth);
-  const loadResistanceKilohms = Number(theveninInputs.rl);
-  const enteredRth = kilohmsToOhms(enteredRthKilohms);
-  const loadResistance = kilohmsToOhms(loadResistanceKilohms);
-  const loadCurrentDenominator = enteredRth + loadResistance;
-  const inputsAreValid =
-    hasTheveninInputs &&
-    isWithinRange(enteredVth, INPUT_RANGES.vth) &&
-    isWithinRange(enteredRthKilohms, INPUT_RANGES.rth) &&
-    isWithinRange(loadResistanceKilohms, INPUT_RANGES.rl) &&
-    loadCurrentDenominator > 0;
- const calculatedLoadCurrent = inputsAreValid
-  ? enteredVth / loadCurrentDenominator
-  : null;
-
-const calculatedLoadCurrentDisplay =
-  calculatedLoadCurrent === null
-    ? ''
-    : formatCompactNumber(amperesToMilliamperes(calculatedLoadCurrent), 3);
+    .map(([parameter]) => parameter)
+  const enteredRthKilohms = Number(theveninInputs.rth)
+  const enteredVth = Number(theveninInputs.vth)
+  const inputsAreValid = (
+    missingInputKeys.length === 0
+    && Number.isFinite(enteredVth)
+    && Number.isFinite(enteredRthKilohms)
+    && enteredRthKilohms !== 0
+  )
+  const calculatedMaximumPowerMilliwatts = inputsAreValid
+    ? (enteredVth ** 2) / (4 * enteredRthKilohms)
+    : null
+  const calculatedMaximumPowerDisplay = (
+    calculatedMaximumPowerMilliwatts === null
+      ? ''
+      : formatCompactNumber(calculatedMaximumPowerMilliwatts, 3)
+  )
 
   useEffect(() => {
-    setUserCalculatedIL(calculatedLoadCurrentDisplay);
-  }, [calculatedLoadCurrentDisplay, setUserCalculatedIL]);
+    setUserCalculatedPmax(calculatedMaximumPowerDisplay)
+  }, [calculatedMaximumPowerDisplay, setUserCalculatedPmax])
 
   const handleTheveninInputChange = (parameter, value) => {
-    const nextValue = clampInputToRange(value, INPUT_RANGES[parameter]);
-
     setTheveninInputs((current) => ({
       ...current,
-      [parameter]: nextValue,
-    }));
+      [parameter]: value,
+    }))
     setIncorrectInputs((current) => ({
       ...current,
       [parameter]: false,
-    }));
-    setCalculatedCurrentIncorrect(false);
-    setVerificationResult('');
-  };
+    }))
+    setVerificationResult('')
+  }
 
   const handleTheveninInputBlur = (parameter) => {
     setTheveninInputs((current) => {
-      const currentValue = current[parameter];
+      const currentValue = current[parameter]
 
-      if (currentValue.trim() === '') return current;
+      if (currentValue.trim() === '') return current
 
-      const numericValue = Number(currentValue);
+      const numericValue = Number(currentValue)
 
-      if (!Number.isFinite(numericValue)) return current;
+      if (!Number.isFinite(numericValue)) return current
 
       return {
         ...current,
         [parameter]: String(numericValue),
-      };
-    });
-  };
+      }
+    })
+  }
 
   const handleVerify = () => {
-    if (!calculationDone) return;
+    if (!calculationDone) return
 
     if (missingInputKeys.length > 0) {
-      const onlyOneValueIsMissing = missingInputKeys.length === 1;
+      const onlyOneValueIsMissing = missingInputKeys.length === 1
 
       onGuideEvent?.({
         alertType: 'warning',
-        title: 'Input Required',
         description: onlyOneValueIsMissing
-          ? 'Please enter the required value, then click the “Verify” button to verify the theorem.'
-          : 'Please enter all the values, then click the “Verify” button to verify the theorem.',
+          ? 'Enter the missing Thevenin value, then click Verify.'
+          : 'Enter both VTH and RTH, then click Verify.',
         missingCount: missingInputKeys.length,
         target: '#calculation-panel',
+        title: 'Input Required',
         type: 'CALCULATION_INPUT_REQUIRED',
-      });
-      return;
+      })
+      return
     }
 
-    const expectedVth = Number(calculatedValues?.vth);
-    const expectedRthKilohms = ohmsToKilohms(calculatedValues?.rth);
-    const expectedLoadResistanceKilohms = ohmsToKilohms(calculatedValues?.rl);
+    const expectedVth = Number(calculatedValues?.vth)
+    const expectedRthKilohms = ohmsToKilohms(calculatedValues?.rth)
     const nextIncorrectInputs = {
-      vth:
-        !isWithinRange(enteredVth, INPUT_RANGES.vth)
-        || !approximatelyEquals(enteredVth, expectedVth, INPUT_TOLERANCES.vth),
-      rth:
-        !isWithinRange(enteredRthKilohms, INPUT_RANGES.rth)
+      rth: (
+        !Number.isFinite(enteredRthKilohms)
         || !approximatelyEquals(
           enteredRthKilohms,
           expectedRthKilohms,
           INPUT_TOLERANCES.rth,
-        ),
-      rl:
-        !isWithinRange(loadResistanceKilohms, INPUT_RANGES.rl)
+        )
+      ),
+      vth: (
+        !Number.isFinite(enteredVth)
         || !approximatelyEquals(
-          loadResistanceKilohms,
-          expectedLoadResistanceKilohms,
-          INPUT_TOLERANCES.rl,
-        ),
-    };
-
-    const actual = Number(observedIL);
-    const loadCurrentDifferenceMilliamperes = inputsAreValid && Number.isFinite(actual)
-      ? Math.abs(amperesToMilliamperes(calculatedLoadCurrent - actual))
-      : Number.POSITIVE_INFINITY;
-    const nextCalculatedCurrentIncorrect =
-      loadCurrentDifferenceMilliamperes > LOAD_CURRENT_TOLERANCE_MILLIAMPERES;
-    const hasIncorrectInput = Object.values(nextIncorrectInputs).some(Boolean);
-    const isCorrect =
-      !hasIncorrectInput &&
-      !nextCalculatedCurrentIncorrect;
-
-    setIncorrectInputs(nextIncorrectInputs);
-    setCalculatedCurrentIncorrect(nextCalculatedCurrentIncorrect);
-
-    if (isCorrect) {
-      onGuideEvent?.({
-        isCorrect: true,
-        type: 'VERIFICATION_RESULT',
-      })
-      setVerificationResult('✅ Verified Successfully');
-
-    } else {
-      onGuideEvent?.({
-        isCorrect: false,
-        type: 'VERIFICATION_RESULT',
-      })
-      setVerificationResult('❌ Incorrect Calculation');
+          enteredVth,
+          expectedVth,
+          INPUT_TOLERANCES.vth,
+        )
+      ),
     }
-  };
+    const isCorrect = !Object.values(nextIncorrectInputs).some(Boolean)
+
+    setIncorrectInputs(nextIncorrectInputs)
+    onGuideEvent?.({
+      isCorrect,
+      type: 'VERIFICATION_RESULT',
+    })
+    setVerificationResult(
+      isCorrect
+        ? '✅ Verified Successfully'
+        : '❌ Incorrect Calculation',
+    )
+  }
+
+  const renderCircuitValue = (label, value, unit) => (
+    <div className="maximum-power-parameter">
+      <span className="maximum-power-parameter__label">{label}</span>
+      <output className="maximum-power-parameter__value">
+        {calculationDone && value !== ''
+          ? formatCompactNumber(value, 1)
+          : ''}
+      </output>
+      <span className="maximum-power-parameter__unit">{unit}</span>
+    </div>
+  )
 
   return (
-    <section id="calculation-panel" className="graph-panel graph-panel--separate">
-      <div className="graph-panel__heading">
-        <div>
+    <section className="maximum-power-results" id="maximum-power-results">
+      <PowerLoadGraph observations={observations} />
+
+      <section className="analysis-card theoretical-calculation-panel" id="calculation-panel">
+        <header className="analysis-card__heading">
           <h2>THEORETICAL CALCULATIONS</h2>
-        </div>
-      </div>
+        </header>
 
-      <div className="graph-panel__body">
-
-        {/* TOP ROW: Resistance & Source Values */}
-        <div className="calc-top-row">
-          
-          {/* Resistance Values Card */}
-          <div className="values-card">
-            <h3>Resistance Values</h3>
-            <div className="values-inline-group">
-              <div className="inline-input-item">
-                <span className="inline-label">R<sub>1</sub>:</span>
-                <div className="inline-display">
-                  {calculationDone && r1 !== ''
-                    ? formatCompactNumber(r1, 0)
-                    : ''}
-                </div>
-                <span className="inline-unit">Ω</span>
-              </div>
-              
-              <div className="inline-input-item">
-                <span className="inline-label">R<sub>2</sub>:</span>
-                <div className="inline-display">
-                  {calculationDone && r2 !== ''
-                    ? formatCompactNumber(r2, 0)
-                    : ''}
-                </div>
-                <span className="inline-unit">Ω</span>
-              </div>
-              
-              <div className="inline-input-item">
-                <span className="inline-label">R<sub>3</sub>:</span>
-                <div className="inline-display">
-                  {calculationDone && r3 !== ''
-                    ? formatCompactNumber(r3, 0)
-                    : ''}
-                </div>
-                <span className="inline-unit">Ω</span>
-              </div>
-
-              <div className="inline-input-item">
-                <span className="inline-label">R<sub>L</sub>:</span>
-                <div className="inline-display">
-                  {calculationDone && rl !== ''
-                    ? formatCompactNumber(rl, 0)
-                    : ''}
-                </div>
-                <span className="inline-unit">Ω</span>
+        <div className="theoretical-calculation-panel__body">
+          <section className="maximum-power-values-card">
+            <div className="maximum-power-values-card__section">
+              <h3>Resistance Values</h3>
+              <div className="maximum-power-values-card__resistances">
+                {renderCircuitValue(<ElectricalText text="R1:" />, r1, 'Ω')}
+                {renderCircuitValue(<ElectricalText text="R2:" />, r2, 'Ω')}
+                {renderCircuitValue(<ElectricalText text="R3:" />, r3, 'Ω')}
               </div>
             </div>
-          </div>
 
-          {/* Source Values Card */}
-          <div className="values-card">
-            <h3>Source Values</h3>
-            <div className="values-inline-group">
-
-              <div className="inline-input-item">
-                <span className="inline-label long-label">Voltage Source:</span>
-                <div className="inline-display">
-                  {calculationDone && voltageSource !== '' ? Number(voltageSource) : ''}
-                </div>
-                <span className="inline-unit">V</span>
+            <div className="maximum-power-values-card__section maximum-power-values-card__source">
+              <h3>Source Value</h3>
+              <div>
+                {renderCircuitValue('Voltage Source:', voltageSource, 'V')}
               </div>
             </div>
-          </div>
+          </section>
 
-        </div>
-
-        {/* Observed and calculated current share one continuous calculation area. */}
-        <div className="load-current-calculation">
-          <div className="observed-current-row">
-            <span className="load-current-heading">
-              Observed Load Current (<ElectricalText text="IL" />) =
-            </span>
-            <output
-              aria-label="Observed load current in milliamperes"
-              className="observed-current-value"
-            >
-              {calculationDone && observedIL !== ''
-                ? formatCompactNumber(amperesToMilliamperes(observedIL), 3)
-                : ''}
-              {calculationDone && observedIL !== '' ? ' mA' : ''}
-            </output>
-          </div>
-
-          <div className="calculated-current-section">
-            <h3 className="load-current-heading">
-              Calculated Load Current (<ElectricalText text="IL" />):
-            </h3>
-
+          <section className="maximum-power-formula-card">
+            <h3>Maximum Power</h3>
             <div
-              className="load-current-equation"
-              aria-label="Load current equals Thevenin voltage divided by the sum of Thevenin resistance and load resistance"
+              aria-label="Maximum power equals Thevenin voltage squared divided by four times Thevenin resistance"
+              className="maximum-power-equation"
             >
-              <span className="equation-lead">
-                <ElectricalText text="IL" /> =
+              <span className="maximum-power-equation__lead">
+                P<sub>max</sub> =
               </span>
 
-              <div className="equation-fraction">
-                <label className="equation-term equation-numerator">
-                  <ElectricalText text="Vth" />
+              <div className="maximum-power-equation__fraction">
+                <label className="maximum-power-equation__term maximum-power-equation__numerator">
+                  <span
+                    aria-hidden="true"
+                    className="maximum-power-equation__voltage-symbol"
+                  >
+                    V<sup>2</sup><sub>TH</sub>
+                  </span>
                   <input
-                    aria-label="Enter Thevenin equivalent voltage"
+                    aria-label="Enter Thevenin voltage in volts"
                     aria-invalid={incorrectInputs.vth}
-                    className={`formula-input${incorrectInputs.vth ? ' formula-input--error' : ''}`}
+                    className={`maximum-power-input${incorrectInputs.vth ? ' maximum-power-input--error' : ''}`}
                     disabled={!calculationDone}
-                    max={INPUT_RANGES.vth.max}
-                    min={INPUT_RANGES.vth.min}
                     onBlur={() => handleTheveninInputBlur('vth')}
                     onChange={(event) => handleTheveninInputChange('vth', event.target.value)}
-                    onKeyDown={preventInvalidNumberKey}
                     onWheel={preventMouseWheelAdjustment}
-                    placeholder="Enter Value"
-                    step="0.01"
-                    title="Enter a value from 0 to 100 V"
+                    placeholder="Enter value"
+                    step="any"
+                    title="Enter VTH in volts"
                     type="number"
                     value={theveninInputs.vth}
                   />
-                  <span className="equation-input-unit">V</span>
-                </label> 
-                <div className="equation-denominator">
-                  <label className="equation-term">
+                  <span className="maximum-power-equation__unit">V</span>
+                </label>
+
+                <div className="maximum-power-equation__denominator">
+                  <span>4 ×</span>
+                  <label className="maximum-power-equation__term">
                     <ElectricalText text="Rth" />
                     <input
-                      aria-label="Enter Thevenin equivalent resistance in kilo-ohms"
+                      aria-label="Enter Thevenin resistance in kilo-ohms"
                       aria-invalid={incorrectInputs.rth}
-                      className={`formula-input${incorrectInputs.rth ? ' formula-input--error' : ''}`}
+                      className={`maximum-power-input${incorrectInputs.rth ? ' maximum-power-input--error' : ''}`}
                       disabled={!calculationDone}
-                      max={INPUT_RANGES.rth.max}
-                      min={INPUT_RANGES.rth.min}
                       onBlur={() => handleTheveninInputBlur('rth')}
                       onChange={(event) => handleTheveninInputChange('rth', event.target.value)}
-                      onKeyDown={preventInvalidNumberKey}
                       onWheel={preventMouseWheelAdjustment}
-                      placeholder="Enter Value"
-                      step="0.01"
-                      title="Enter a value from 0 to 50 kΩ"
+                      placeholder="Enter value"
+                      step="any"
+                      title="Enter RTH in kilo-ohms"
                       type="number"
                       value={theveninInputs.rth}
                     />
-                    <span className="equation-input-unit">kΩ</span>
-                  </label>
-                  <span aria-hidden="true" className="equation-operator">+</span>
-                  <label className="equation-term">
-                    <ElectricalText text="RL" />
-                    <input
-                      aria-label="Enter load resistance in kilo-ohms"
-                      aria-invalid={incorrectInputs.rl}
-                      className={`formula-input${incorrectInputs.rl ? ' formula-input--error' : ''}`}
-                      disabled={!calculationDone}
-                      max={INPUT_RANGES.rl.max}
-                      min={INPUT_RANGES.rl.min}
-                      onBlur={() => handleTheveninInputBlur('rl')}
-                      onChange={(event) => handleTheveninInputChange('rl', event.target.value)}
-                      onKeyDown={preventInvalidNumberKey}
-                      onWheel={preventMouseWheelAdjustment}
-                      placeholder="Enter Value"
-                      step="0.01"
-                      title="Enter a value from 0 to 5 kΩ"
-                      type="number"
-                      value={theveninInputs.rl}
-                    />
-                    <span className="equation-input-unit">kΩ</span>
+                    <span className="maximum-power-equation__unit">kΩ</span>
                   </label>
                 </div>
               </div>
 
-              <div className="equation-result">
-                <span className="equation-equals" aria-hidden="true">=</span>
-                <input
-                  aria-label="Calculated load current"
-                  aria-invalid={calculatedCurrentIncorrect}
-                  aria-readonly="true"
-                  className={`formula-input formula-result-input${calculatedCurrentIncorrect ? ' formula-input--error' : ''}`}
-                  disabled={!calculationDone}
-                  placeholder="Answer"
-                  readOnly
-                  step="0.000001"
-                  type="number"
-                  value={calculatedLoadCurrentDisplay}
-                />
-                <span className="equation-unit">mA</span>
-              </div>
+              <span className="maximum-power-equation__equals">=</span>
+              <output
+                aria-label="Calculated maximum power in milliwatts"
+                className="maximum-power-result"
+              >
+                {calculatedMaximumPowerDisplay}
+              </output>
+              <span className="maximum-power-equation__result-unit">mW</span>
             </div>
+          </section>
+
+          <div className="maximum-power-verification">
+            <button
+              className="verify-btn"
+              disabled={!calculationDone}
+              onClick={handleVerify}
+              type="button"
+            >
+              Verify
+            </button>
+
+            {verificationResult ? (
+              <div
+                className={`verification-message ${
+                  verificationResult.includes('Verified') ? 'success' : 'error'
+                }`}
+              >
+                {verificationResult}
+              </div>
+            ) : null}
           </div>
         </div>
-
-        {/* Action Button Segment */}
-        <div className="verification-section">
-          <button
-            type="button"
-            onClick={handleVerify}
-            disabled={!calculationDone}
-            className="verify-btn"
-          >
-            Verify
-          </button>
-
-          {verificationResult && (
-            <div
-              className={`verification-message ${
-                verificationResult.includes('Verified') ? 'success' : 'error'
-              }`}
-            >
-              {verificationResult}
-            </div>
-          )}
-        </div>
-
-      </div>
+      </section>
     </section>
-  );
-};
+  )
+}
 
-export default CalculationPanel;
+export default CalculationPanel
