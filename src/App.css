@@ -537,16 +537,16 @@
 .observation-table-wrap {
   position: relative;
   z-index: 1;
-  height: auto;
+  height: 252.8px;
   margin: 6.4px 8px 8px;
-  overflow: visible;
+  overflow-y: auto;
   border: 0.8px solid rgba(96, 61, 35, 0.34);
   border-radius: 6.4px;
   background: rgba(255, 247, 236, 0.82);
 }
 
 .observation-table-card {
-  height: 150px;
+  height: 308px;
 }
 
 .observation-table {
@@ -576,7 +576,7 @@
 }
 
 .observation-table td {
-  height: 32px;
+  height: 20px;
   color: #2d1b11;
   font-weight: 700;
   text-align: center;

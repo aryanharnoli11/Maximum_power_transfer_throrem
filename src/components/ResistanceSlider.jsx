@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import { RESISTANCE_SLIDER_CONFIG } from '../utils/resistance.js'
 
-const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
+const ResistanceSlider = ({
+  disabled = false,
+  label,
+  maxPosition,
+  minPosition,
+  onChange,
+  value,
+}) => {
   const config = RESISTANCE_SLIDER_CONFIG.load
   const discreteValues = config.values ?? null
 
@@ -66,10 +73,17 @@ const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
           onChange={(event) => {
             setIsEditing(true)
             const nextPosition = Number(event.target.value)
+            const boundedPosition = discreteValues
+              ? Math.min(
+                  Math.max(nextPosition, minPosition ?? sliderMin),
+                  maxPosition ?? sliderMax,
+                )
+              : nextPosition
+
             setDraftValue(
               discreteValues
-                ? discreteValues[nextPosition]
-                : nextPosition,
+                ? discreteValues[boundedPosition]
+                : boundedPosition,
             )
           }}
           onKeyUp={commitValue}

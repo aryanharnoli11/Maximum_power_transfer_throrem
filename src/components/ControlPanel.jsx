@@ -5,7 +5,9 @@ import SectionCard from './SectionCard.jsx'
 
 const ControlPanel = ({
   locked,
+  maxResistancePosition,
   minReadings,
+  minResistancePosition,
   onGenerateReport,
   observations,
   readingCount,
@@ -25,6 +27,8 @@ const ControlPanel = ({
         <ResistanceSlider
           disabled={locked}
           label="RL"
+          maxPosition={maxResistancePosition}
+          minPosition={minResistancePosition}
           onChange={setRl}
           value={rl}
         />

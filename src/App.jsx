@@ -14,22 +14,16 @@ import { calculateReadings } from './utils/circuitMath.js'
 import { generateTheveninReport } from './utils/theveninReportGenerator.js'
 import {
   FIXED_NETWORK_RESISTANCES,
+  LOAD_RESISTANCE_VALUES,
   RESISTANCE_SLIDER_CONFIG,
 } from './utils/resistance.js'
 
 const BASE_WIDTH = 1152
 const DEFAULT_CONTENT_HEIGHT = 1440
 const PANEL_VIEWPORT_GUTTER = 0
-const MIN_OBSERVATION_READINGS = 1
-const MAX_OBSERVATIONS = 10
-
-const getObservationSignature = ({ vth, rth, il }) => (
-  [
-    Number(vth).toFixed(3),
-    Number(rth).toFixed(3),
-    Number(il).toFixed(3),
-  ].join('|')
-)
+const MIN_OBSERVATION_READINGS = LOAD_RESISTANCE_VALUES.length
+const MAX_OBSERVATIONS = LOAD_RESISTANCE_VALUES.length
+const CIRCUIT_RESISTANCE_CONFIGURATION = { rl: true }
 
 const getAvailableWidth = () => {
   if (typeof window === 'undefined') {
@@ -66,9 +60,6 @@ const App = () => {
   })
   const { r1, r2, r3 } = FIXED_NETWORK_RESISTANCES
   const [rl, setRl] = useState(RESISTANCE_SLIDER_CONFIG.load.initial)
-  const [resistanceSelections, setResistanceSelections] = useState({
-    rl: false,
-  })
   const [voltage, setVoltage] = useState(1)
   const [powerOn, setPowerOn] = useState(false)
   const [voltageLocked, setVoltageLocked] = useState(false)
@@ -84,7 +75,7 @@ const App = () => {
   const [reportGenerated, setReportGenerated] = useState(false)
   const [reportPrinted, setReportPrinted] = useState(false)
   const [status, setStatus] = useState(
-    'Make the connections, click CHECK, then set the resistance values.',
+    'Measure VTH to unlock the load-resistance slider.',
   )
   const [checkRequest, setCheckRequest] = useState(0)
   const [resetRequest, setResetRequest] = useState(0)
@@ -112,14 +103,38 @@ const App = () => {
     showStepAlert,
   })
 
-  const resistancesConfigured = Object.values(resistanceSelections).every(Boolean)
+  const resistancesConfigured = true
+  const loadObservations = observations.filter((row) => (
+    typeof row.il === 'number' && Number.isFinite(row.il)
+  ))
+  const loadReadingCount = loadObservations.length
+  const expectedLoadResistance = (
+    LOAD_RESISTANCE_VALUES[loadReadingCount] ?? null
+  )
+  const resistanceMinPosition = Math.max(0, loadReadingCount - 1)
+  const resistanceMaxPosition = Math.min(
+    loadReadingCount,
+    LOAD_RESISTANCE_VALUES.length - 1,
+  )
+  const resistanceSliderDisabled = (
+    measuredVth === null || experimentCase !== 3
+  )
 
   const handleResistanceChange = (value) => {
+    if (resistanceSliderDisabled) {
+      return
+    }
+
+    const nextPosition = LOAD_RESISTANCE_VALUES.indexOf(value)
+
+    if (
+      nextPosition < resistanceMinPosition
+      || nextPosition > resistanceMaxPosition
+    ) {
+      return
+    }
+
     setRl(value)
-    setResistanceSelections((current) => ({
-      ...current,
-      rl: true,
-    }))
   }
 
   useEffect(() => {
@@ -214,10 +229,10 @@ const App = () => {
   useEffect(() => {
     void notifyGuide({
       configured: resistancesConfigured,
-      selections: resistanceSelections,
+      selections: CIRCUIT_RESISTANCE_CONFIGURATION,
       type: 'RESISTANCE_CONFIGURATION',
     })
-  }, [notifyGuide, resistanceSelections, resistancesConfigured])
+  }, [notifyGuide, resistancesConfigured])
 
   const readings = useMemo(
     () => calculateReadings({
@@ -230,16 +245,8 @@ const App = () => {
     [powerOn, r1, r2, r3, rl, voltage],
   )
   const normalizedVoltage = Number(voltage.toFixed(1))
-  const currentReadingSignature = getObservationSignature({
-    vth: readings.vth,
-    rth: readings.rth,
-    il: readings.il,
-  })
-  const hasDuplicateReading = observations.some((row) => (
-    row.voltage === normalizedVoltage
-    || getObservationSignature(row) === currentReadingSignature
-  ))
-  const readingCount = observations.length
+  const hasDuplicateReading = loadObservations.some((row) => row.rl === rl)
+  const readingCount = loadReadingCount
 
   const handleAiGuide = useCallback(() => {
     if (guideState.guideStarted) {
@@ -319,7 +326,7 @@ const App = () => {
       return
     }
 
-    if (readingCount >= MAX_OBSERVATIONS) {
+    if (experimentCase === 3 && readingCount >= MAX_OBSERVATIONS) {
       setStatus('Observation table is full. Reset the experiment for a new run.')
       void notifyGuide({
         description: 'The observation table already contains the maximum number of readings.',
@@ -330,14 +337,22 @@ const App = () => {
       return
     }
 
-    if (hasDuplicateReading) {
-      setStatus('Duplicate reading cannot be added to the observation table.')
+    if (
+      experimentCase === 3
+      && rl !== expectedLoadResistance
+    ) {
+      setStatus(`Move the RL slider one step to ${expectedLoadResistance} Ω before adding the next reading.`)
       void notifyGuide({
-        description: 'This reading already exists in the observation table. Change the voltage before adding another reading.',
-        target: '#voltage-control',
-        title: 'Duplicate Reading Not Allowed',
+        description: `Set RL to the next required value of ${expectedLoadResistance} Ω, then add the reading.`,
+        target: '#resistance-controls',
+        title: 'Use the Next Resistance Step',
         type: 'ADD_REJECTED',
       })
+      return
+    }
+
+    if (experimentCase === 3 && hasDuplicateReading) {
+      setStatus('The load-power reading at this resistance has already been added.')
       return
     }
 
@@ -365,20 +380,42 @@ const App = () => {
         },
       ])
       setMeasuredVth(readings.vth)
+      setRl(LOAD_RESISTANCE_VALUES[0])
       setVoltageLocked(true)
       setConnectionsVerified(false)
       setExperimentCase(3)
       setCase2ConnectionsRemoved(false)
     } else if (completedCase === 3) {
-      setObservations([
-        {
-          ...observations[0],
-          il: readings.il,
-        },
-      ])
+      const nextReadingCount = loadReadingCount + 1
+      const loadPowerMilliwatts = (readings.il ** 2) * rl * 1000
+      const nextObservation = {
+        id: nextReadingCount,
+        il: readings.il,
+        rl,
+        rth: observations[0]?.rth ?? measuredRth,
+        vth: observations[0]?.vth ?? measuredVth,
+      }
+      const nextObservations = loadReadingCount === 0
+        ? [nextObservation]
+        : [...observations, nextObservation]
+      const allLoadReadingsAdded = nextReadingCount >= MAX_OBSERVATIONS
+
+      setObservations(nextObservations)
       setMeasuredIl(readings.il)
-      setConnectionsVerified(false)
-      setExperimentCase(4)
+
+      if (allLoadReadingsAdded) {
+        setConnectionsVerified(false)
+        setExperimentCase(4)
+      } else {
+        const nextResistance = LOAD_RESISTANCE_VALUES[nextReadingCount]
+
+        setStatus(
+          `PL = ${loadPowerMilliwatts.toFixed(3)} mW recorded at ${rl} Ω. Move RL one step to ${nextResistance} Ω.`,
+        )
+        setReportGenerated(false)
+        setReportPrinted(false)
+        return
+      }
     }
 
     void notifyGuide({
@@ -389,8 +426,10 @@ const App = () => {
     setReportPrinted(false)
     setStatus(
       completedCase === 2
-        ? 'Case 2 reading added. Turn OFF the power supply manually, then remove the voltmeter connections.'
-        : 'Reading added to the observation table.',
+        ? 'VTH recorded. The RL slider is unlocked at 0 Ω. Turn OFF the supply, remove the voltmeter connections, and prepare Case 3.'
+        : completedCase === 3
+          ? 'All load-power readings were added. Click CALCULATE to continue.'
+          : 'Reading added to the observation table.',
     )
   }
 
@@ -399,9 +438,6 @@ const App = () => {
     setVoltage(1)
     setVoltageLocked(false)
     setRl(RESISTANCE_SLIDER_CONFIG.load.initial)
-    setResistanceSelections({
-      rl: false,
-    })
     setObservations([])
     setCalculationDone(false)
     setCalculatedValues(null)
@@ -593,15 +629,17 @@ const App = () => {
   }, [experimentCase, notifyGuide, powerOn])
 
   const handleCalculate = () => {
+    const latestLoadObservation = loadObservations.at(-1)
+
     setCalculatedValues({
       r1,
       r2,
       r3,
-      rl: observations[0]?.rl ?? rl,
+      rl: latestLoadObservation?.rl ?? rl,
       voltageSource: voltage,
       vth: observations[0]?.vth ?? measuredVth,
       rth: observations[0]?.rth ?? measuredRth,
-      observedIL: observations[0]?.il ?? measuredIl,
+      observedIL: latestLoadObservation?.il ?? measuredIl,
     })
     setCalculationDone(true)
     void notifyGuide({ type: 'CALCULATE' })
@@ -626,9 +664,7 @@ const App = () => {
     'Verified Successfully',
   )
   const activeInstructionStep = (
-    !resistancesConfigured
-      ? 'step1'
-      : experimentCase === 1
+    experimentCase === 1
         || (experimentCase === 2 && !case1ConnectionsRemoved)
         ? 'case1'
         : experimentCase === 2
@@ -682,7 +718,17 @@ const App = () => {
                     onAiGuide: guideState.guideStarted,
                   }}
                   disabledButtons={{
-                    onAdd: !connectionsVerified,
+                    onAdd: (
+                      !connectionsVerified
+                      || (
+                        experimentCase === 3
+                        && (
+                          expectedLoadResistance === null
+                          || rl !== expectedLoadResistance
+                          || hasDuplicateReading
+                        )
+                      )
+                    ),
                     onCalculate: experimentCase !== 4,
                     onCheck: false,
                     onPrint: false,
@@ -697,8 +743,10 @@ const App = () => {
                 />
 
                 <ControlPanel
-                  locked={powerOn}
+                  locked={resistanceSliderDisabled}
+                  maxResistancePosition={resistanceMaxPosition}
                   minReadings={MIN_OBSERVATION_READINGS}
+                  minResistancePosition={resistanceMinPosition}
                   observations={observations}
                   onGenerateReport={handleGenerateReport}
                   readingCount={readingCount}
@@ -720,7 +768,7 @@ const App = () => {
                   onCheckConnections={handleCheckConnections}
                   onGuideEvent={notifyGuide}
                   onTogglePower={handleTogglePower}
-                  observationIl={observations[0]?.il ?? null}
+                  observationIl={loadObservations.at(-1)?.il ?? null}
                   observationVth={observations[0]?.vth ?? null}
                   powerOn={powerOn}
                   r1={r1}

@@ -1,8 +1,9 @@
 import SectionCard from './SectionCard.jsx'
 import { amperesToMilliamperes } from '../utils/current.js'
 import { formatCompactNumber } from '../utils/numberFormat.js'
+import { LOAD_RESISTANCE_VALUES } from '../utils/resistance.js'
 
-const OBSERVATION_ROW_COUNT = 1
+const OBSERVATION_ROW_COUNT = LOAD_RESISTANCE_VALUES.length
 const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => {

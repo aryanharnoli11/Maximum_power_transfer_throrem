@@ -224,7 +224,7 @@ const ActionButtons = ({
 
   <li {...getInstructionProps('step1')}>
     <strong>STEP 1:</strong>{' '}
-    <ElectricalText text="Set RL using the resistance slider. R1, R2 and R3 are fixed at 466 Ω, 216 Ω and 470 Ω." />
+    <ElectricalText text="Measure RTH and VTH first. The RL slider remains locked until VTH is recorded." />
   </li>
 
   <li>
@@ -262,7 +262,8 @@ const ActionButtons = ({
 <li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
 <li>Click CHECK.</li>
 <li>Turn ON the Power Supply at the same voltage setting used in Case 2.</li>
-<li>Click ADD to record <ElectricalText text="IL" />.</li>
+<li>Click ADD at 0 Ω to record the first <ElectricalText text="IL" /> and <ElectricalText text="PL" /> values.</li>
+<li>Move the RL slider one division at a time and click ADD at each value: 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω.</li>
         </ul>
       </li>
     </ol>
