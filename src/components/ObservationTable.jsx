@@ -6,6 +6,8 @@ const OBSERVATION_ROW_COUNT = 1
 const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => {
+  const summary = observations[0]
+
   return (
     <SectionCard className="observation-table-card" icon="table" id="observation-table-panel" title="OBSERVATION TABLE">
       <div className="observation-table-wrap">
@@ -13,8 +15,14 @@ const ObservationTable = ({ observations }) => {
           <caption className="sr-only">Thevenin and load readings</caption>
           <thead>
             <tr className="observation-table__group-headings">
-              <th colSpan="2">R<sub>TH</sub> (&Omega;)</th>
-              <th colSpan="2">V<sub>TH</sub> (V)</th>
+              <th colSpan="2">
+                R<sub>TH</sub> (&Omega;)
+                {typeof summary?.rth === 'number' ? `: ${formatCompactNumber(summary.rth, 0)}` : ''}
+              </th>
+              <th colSpan="2">
+                V<sub>TH</sub> (V)
+                {typeof summary?.vth === 'number' ? `: ${formatCompactNumber(summary.vth, 3)}` : ''}
+              </th>
             </tr>
             <tr className="observation-table__column-headings">
               <th>S.No.</th>
@@ -26,15 +34,16 @@ const ObservationTable = ({ observations }) => {
           <tbody>
             {emptyRows.map((_, index) => {
               const row = observations[index]
-              const loadPowerMilliwatts = typeof row?.il === 'number' && typeof row?.rl === 'number'
+              const hasLoadReading = typeof row?.il === 'number'
+              const loadPowerMilliwatts = hasLoadReading && typeof row?.rl === 'number'
                 ? (row.il ** 2) * row.rl * 1000
                 : null
 
               return (
                 <tr key={index}>
-                  <td>{row?.id ?? ''}</td>
-                  <td>{typeof row?.rl === 'number' ? formatCompactNumber(row.rl, 0) : ''}</td>
-                  <td>{typeof row?.il === 'number' ? formatCompactNumber(amperesToMilliamperes(row.il), 3) : ''}</td>
+                  <td>{hasLoadReading ? row?.id : ''}</td>
+                  <td>{hasLoadReading && typeof row?.rl === 'number' ? formatCompactNumber(row.rl, 0) : ''}</td>
+                  <td>{hasLoadReading ? formatCompactNumber(amperesToMilliamperes(row.il), 3) : ''}</td>
                   <td>{loadPowerMilliwatts !== null ? formatCompactNumber(loadPowerMilliwatts, 3) : ''}</td>
                 </tr>
               )

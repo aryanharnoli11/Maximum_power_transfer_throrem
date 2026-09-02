@@ -5,7 +5,7 @@ import {
   getTerminalHighlightClass,
   getTerminalNumberHighlightClass,
 } from '../utils/terminalHighlight.js'
-import { formatKilohms } from '../utils/resistance.js'
+import { formatCompactNumber } from '../utils/numberFormat.js'
 const DigitalMultimeter = ({
   connectedTerminalIds = [],
   highlightedTerminalIds = [],
@@ -85,7 +85,7 @@ className={`terminal-number-label terminal-number-label--meter-minus terminal-nu
 
 <div className="multimeter-display">
   {showValue
-    ? `${formatKilohms(resistance, 2)} kΩ`
+    ? `${formatCompactNumber(resistance, 0)} Ω`
     : ''}
 </div>
     </article>

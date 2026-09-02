@@ -106,11 +106,11 @@ className={`terminal-number-label terminal-number-label--power-minus terminal-nu
   disabled={!powerOn || voltageLocked}
   id="voltage-slider"
   max="15"
-  min="1"
+  min="0"
   onChange={handleVoltageChange}
   onKeyUp={handleVoltageKeyUp}
   onPointerUp={handleVoltageSet}
-  step="1"
+  step="5"
   type="range"
   value={voltage}
 />
