@@ -708,18 +708,18 @@
 
 .power-supply__image {
   position: absolute;
-  top: -0.8px;
+  top: 15px;
   left: 0.8px;
   z-index: 1;
   width: 240px;
-  height: 192px;
+  height: 162px;
   object-fit: fill;
   filter: none;
 }
 
 .power-supply__display {
   position: absolute;
-  top: 44px;
+  top: 52px;
   left: 32px;
   z-index: 4;
   display: flex;
