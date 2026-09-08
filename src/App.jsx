@@ -120,6 +120,12 @@ const App = () => {
   const resistanceSliderDisabled = (
     measuredVth === null || experimentCase !== 3
   )
+  const powerToggleLocked = (
+    powerOn
+    && experimentCase === 3
+    && connectionsVerified
+    && loadReadingCount < MAX_OBSERVATIONS
+  )
 
   const handleResistanceChange = (value) => {
     if (resistanceSliderDisabled) {
@@ -616,6 +622,11 @@ const App = () => {
       return
     }
 
+    if (powerToggleLocked) {
+      setStatus('The MCB must remain ON until all ten load readings are recorded.')
+      return
+    }
+
     if (!powerOn && !connectionsVerified) {
       void notifyGuide({
         description: 'Complete all required connections before switching ON the power supply.',
@@ -813,6 +824,7 @@ const App = () => {
                   observationIl={loadObservations.at(-1)?.il ?? null}
                   observationVth={observations[0]?.vth ?? null}
                   powerOn={powerOn}
+                  powerToggleLocked={powerToggleLocked}
                   r1={r1}
                   r2={r2}
                   r3={r3}

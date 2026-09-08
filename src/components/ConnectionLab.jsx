@@ -57,6 +57,7 @@ const ConnectionLab = ({
   observationIl,
   observationVth,
   powerOn,
+  powerToggleLocked,
   r1,
   r2,
   r3,
@@ -463,6 +464,7 @@ const ConnectionLab = ({
             onTogglePower={onTogglePower}
             onVoltageSet={onVoltageSet}
             powerOn={powerOn}
+            powerToggleLocked={powerToggleLocked}
             setVoltage={setVoltage}
             voltage={voltage}
             voltageLocked={voltageLocked}

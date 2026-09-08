@@ -154,9 +154,8 @@ const WalkthroughPopup = ({
       audioRef.current = null
       return () => window.clearTimeout(resetPlayingTimer)
     }
-dispatchExclusiveAudioStart(WALKTHROUGH_AUDIO_SOURCE_ID)
+    dispatchExclusiveAudioStart(WALKTHROUGH_AUDIO_SOURCE_ID)
     const audio = new Audio(audioSource)
-    console.log("Walkthrough audio source:", audioSource)
     audioRef.current = audio
 
     const handleEnded = () => setIsPlaying(false)

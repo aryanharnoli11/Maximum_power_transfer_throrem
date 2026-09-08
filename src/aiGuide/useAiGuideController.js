@@ -959,14 +959,13 @@ export const useAiGuideController = ({
       }
 
       case 'CALCULATE': {
-        if (stateRef.current.calculationStarted) {
-          return false
+        if (!stateRef.current.calculationStarted) {
+          updateState((current) => ({
+            ...current,
+            calculationStarted: true,
+          }))
         }
 
-        updateState((current) => ({
-          ...current,
-          calculationStarted: true,
-        }))
         showGuideAlert({
           description: instructionsById.get('32')?.text,
           target: '#calculation-panel',
@@ -974,7 +973,11 @@ export const useAiGuideController = ({
           type: 'info',
         }, '32')
 
-        return runInstructionSequence(['32'])
+        return runInstructionSequence([{
+          force: true,
+          instructionId: '32',
+          playbackId: `calculate:${Date.now()}`,
+        }])
       }
 
       case 'VERIFICATION_RESULT': {

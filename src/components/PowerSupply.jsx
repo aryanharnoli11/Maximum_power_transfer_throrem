@@ -12,6 +12,7 @@ const PowerSupply = ({
   onTogglePower,
   onVoltageSet,
   powerOn,
+  powerToggleLocked = false,
   setVoltage,
   voltage,
   voltageLocked,
@@ -91,10 +92,22 @@ className={`terminal-number-label terminal-number-label--power-minus terminal-nu
 </span>
      <button
   id="power-toggle-button"
-  aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
+  aria-label={
+    powerToggleLocked
+      ? 'Power supply must remain on while load readings are being recorded'
+      : powerOn
+        ? 'Switch power supply off'
+        : 'Switch power supply on'
+  }
   aria-pressed={powerOn}
-  className="power-supply__button"
+  className={`power-supply__button${powerToggleLocked ? ' power-supply__button--disabled' : ''}`}
+  disabled={powerToggleLocked}
   onClick={onTogglePower}
+  title={
+    powerToggleLocked
+      ? 'Record all ten load readings before switching the MCB off.'
+      : undefined
+  }
   type="button"
 />
 

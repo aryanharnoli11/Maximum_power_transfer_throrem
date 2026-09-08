@@ -61,10 +61,6 @@ const WalkthroughProvider = ({
     () => loadWalkthroughConfig(config, locale ?? config?.defaultLocale),
     [config, locale],
   )
-  console.log(
-  "Loaded walkthrough audio:",
-  walkthroughConfig.steps[0].audio
-)
   const [isOpen, setIsOpen] = useState(false)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [isPositioningTarget, setIsPositioningTarget] = useState(false)
