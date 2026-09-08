@@ -47,6 +47,12 @@ const CASE_VERIFIED_INSTRUCTION = {
   3: '38',
 }
 
+const AUTO_CONNECT_INSTRUCTION = {
+  1: '11',
+  2: '42',
+  3: '43',
+}
+
 const REQUIRED_CONNECTION_COUNTS = {
   1: 3,
   2: 4,
@@ -646,8 +652,9 @@ export const useAiGuideController = ({
       case 'AUTO_CONNECT_COMPLETED': {
         const caseNumber = Number(event.caseNumber)
         const stages = CONNECTION_STAGES[caseNumber]
+        const instructionId = AUTO_CONNECT_INSTRUCTION[caseNumber]
 
-        if (!stages) {
+        if (!stages || !instructionId) {
           return false
         }
 
@@ -669,14 +676,14 @@ export const useAiGuideController = ({
             ? 'Autoconnect completed. The digital multimeter is now displaying the Thevenin equivalent resistance value. Now, click on the add button to add the reading to the observation table.'
             : caseNumber === 2
               ? 'Autoconnect completed. Now switch ON the power supply and set the required voltage value.'
-              : 'Autoconnect completed. Turn ON the power supply at the same voltage setting used in Case 2.',
+              : 'Autoconnect completed. Now turn ON the power supply.',
           target: caseNumber === 1 ? '#add-reading-button' : '#power-toggle-button',
           title: 'Autoconnect Completed',
           type: 'success',
-        }, '11')
+        }, instructionId)
 
         return runInstructionSequence([{
-          instructionId: '11',
+          instructionId,
           playbackId: `auto-connect-case-${caseNumber}`,
           priority: AUDIO_PRIORITY.SUCCESS,
         }])
@@ -812,24 +819,27 @@ export const useAiGuideController = ({
 
       case 'LOAD_READING_ADDED': {
         const readingCount = Number(event.readingCount)
-        const description = readingCount === 1
-          ? 'Reading added successfully. Now, vary the load resistance (RL) by moving the resistance slider to take the next reading and then click the Add button.'
+        const instructionId = readingCount === 1
+          ? '44'
           : readingCount === 2
-            ? 'Reading added successfully. Repeat this process until all ten readings have been added.'
+            ? '45'
             : null
 
-        if (!description) {
+        if (!instructionId) {
           return true
         }
 
         showGuideAlert({
-          description,
+          description: instructionsById.get(instructionId)?.text,
           target: '#resistance-controls',
           title: 'Reading Added Successfully',
           type: 'success',
-        })
+        }, instructionId)
 
-        return true
+        return runInstructionSequence([{
+          instructionId,
+          priority: AUDIO_PRIORITY.SUCCESS,
+        }])
       }
 
       case 'CASE_CONNECTIONS_REMOVED': {
@@ -902,7 +912,6 @@ export const useAiGuideController = ({
 
       case 'ADD_REJECTED':
       case 'REPORT_BLOCKED':
-      case 'RESISTANCE_SLIDER_BLOCKED':
       case 'CALCULATION_INPUT_INVALID': {
         showGuideAlert({
           description: event.description,
@@ -911,6 +920,24 @@ export const useAiGuideController = ({
           type: event.alertType ?? 'warning',
         })
         return false
+      }
+
+      case 'RESISTANCE_SLIDER_BLOCKED': {
+        const instructionId = '46'
+
+        showGuideAlert({
+          description: instructionsById.get(instructionId)?.text,
+          target: event.target,
+          title: event.title,
+          type: event.alertType ?? 'warning',
+        }, instructionId)
+
+        return runInstructionSequence([{
+          force: true,
+          instructionId,
+          playbackId: `resistance-slider-blocked:${Date.now()}`,
+          priority: AUDIO_PRIORITY.ERROR,
+        }])
       }
 
       case 'CALCULATION_INPUT_REQUIRED': {

@@ -13,7 +13,7 @@ const INPUT_TOLERANCES = {
 
 const COMPARISON_EPSILON = 1e-9
 const DISPLAY_DECIMAL_PLACES = 2
-const MAXIMUM_POWER_TOLERANCE_MILLIWATTS = 0.01
+const MAXIMUM_POWER_TOLERANCE_MILLIWATTS = 0.02
 const MILLIWATTS_PER_WATT = 1000
 
 const approximatelyEquals = (value, expected, tolerance) => (
@@ -153,8 +153,8 @@ const CalculationPanel = ({
       onGuideEvent?.({
         alertType: 'warning',
         description: onlyOneValueIsMissing
-          ? 'Enter the missing Thevenin value, then click Verify.'
-          : 'Enter both VTH and RTH, then click Verify.',
+          ? 'Please enter the required value, then click the “Verify” button to verify the theorem.'
+          : 'Please enter all the values, then click the “Verify” button to verify the theorem.',
         missingCount: missingInputKeys.length,
         target: '#calculation-panel',
         title: 'Input Required',
@@ -195,7 +195,7 @@ const CalculationPanel = ({
     })
     setVerificationResult(
       isCorrect
-        ? `✅ Verified Successfully: Pmax (${calculatedMaximumPowerDisplay} mW) agrees with the maximum PL (${maximumObservedLoadPowerDisplay} mW) within 0.01 mW.`
+        ? `✅ Verified Successfully: Pmax (${calculatedMaximumPowerDisplay} mW) agrees with the maximum PL (${maximumObservedLoadPowerDisplay} mW) within ${MAXIMUM_POWER_TOLERANCE_MILLIWATTS.toFixed(2)} mW.`
         : '❌ Incorrect Calculation',
     )
   }

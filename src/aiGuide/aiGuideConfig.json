@@ -10,8 +10,8 @@
     },
     {
       "id": 2,
-      "text": "The simulation walkthrough is now complete. You are now ready to perform the experiment. First measure the Thevenin resistance and Thevenin voltage. The load resistance slider will unlock after the Thevenin voltage is recorded.",
-      "audio": "/audios/The simulation walkthrough is now complete.wav"
+      "text": "The simulation walkthrough is now complete. You are now ready to perform the experiment.",
+      "audio": "/audios/The simulation walkthrough is now complete. You are now ready to perform the experiment.wav"
     },
     {
       "id": 3,
@@ -56,7 +56,7 @@
     {
       "id": 11,
       "text": "Autoconnect completed. The digital multimeter is now displaying the Thevenin equivalent resistance value. Now, click on the add button to add the reading to the observation table.",
-      "audio": "/audios/autoconnect.wav"
+      "audio": "/audios/1st Autoconnect.wav"
     },
     {
       "id": 12,
@@ -66,7 +66,7 @@
     {
       "id": 13,
       "text": "Please make the required connections as per the given instructions.",
-      "audio": "/audios/After resistance is set, check button.wav"
+      "audio": "/audios/1st time check button click.wav"
     },
     {
       "id": 14,
@@ -152,13 +152,13 @@
     
     {
       "id": 30,
-      "text": "The reading is displayed on the ammeter. Click Add at zero ohms, then move the load resistance slider one division at a time and click Add for every resistance value.",
+      "text": "The reading is displayed on the ammeter. Now, click on the Add button to add the reading to the observation table.",
       "audio": "/audios/Power supply turned ON for the 3rd case.wav"
     },
     {
       "id": 31,
       "text": "The final reading is added to the observation table. Now, click on the Calculate button to theoretically verify the theorem.",
-      "audio": "/audios/After reading is added for the third case.wav"
+      "audio": "/audios/After the 10th reading.wav"
     },
     {
       "id": 32,
@@ -167,12 +167,12 @@
     },
     {
       "id": 33,
-      "text": "The maximum-power calculation is incorrect. Please review the entered Thevenin voltage and resistance values and try again.",
+      "text": "Incorrect calculations. The Maximum Power Transfer Theorem could not be verified. Please review your calculations and try again.",
       "audio": "/audios/Verify button click, Incorrect calculations.wav"
     },
     {
       "id": 34,
-      "text": "The maximum-power calculation is correct. The Maximum Power Transfer Theorem has been verified successfully. Now, click on the Generate Report button.",
+      "text": "Calculations are correct. The Maximum Power Transfer Theorem has been verified successfully. Now, click on the Generate Report button.",
       "audio": "/audios/Verify button click, Correct calculations.wav"
     },
     {
@@ -209,6 +209,31 @@
       "id": 41,
       "text": "Please enter all the values, then click the “Verify” button to verify the theorem.",
       "audio": "/audios/Verify button click, more than one value is missing.wav"
+    },
+    {
+      "id": 42,
+      "text": "Autoconnect completed. Now switch ON the power supply and set the required voltage value.",
+      "audio": "/audios/2nd Autoconnect.wav"
+    },
+    {
+      "id": 43,
+      "text": "Autoconnect completed. Now turn ON the power supply.",
+      "audio": "/audios/3rd Autoconnect.wav"
+    },
+    {
+      "id": 44,
+      "text": "Reading added successfully. Now, vary the load resistance (RL) by moving the resistance slider to take the next reading and then click the Add button.",
+      "audio": "/audios/1st IL reading added.wav"
+    },
+    {
+      "id": 45,
+      "text": "Reading added successfully. Repeat this process until all ten readings have been added.",
+      "audio": "/audios/2nd time RL clickvary.wav"
+    },
+    {
+      "id": 46,
+      "text": "Please perform the first two cases.",
+      "audio": "/audios/1st time RL click.wav"
     }
   ]
 }
