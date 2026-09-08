@@ -55,7 +55,7 @@
     },
     {
       "id": 11,
-      "text": "Autoconnect completed. Click on the Check button to verify the connections.",
+      "text": "Autoconnect completed. The digital multimeter is now displaying the Thevenin equivalent resistance value. Now, click on the add button to add the reading to the observation table.",
       "audio": "/audios/autoconnect.wav"
     },
     {
@@ -70,7 +70,7 @@
     },
     {
       "id": 14,
-      "text": "Connections Verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Now, click on the Add button to add the readings to the observation table.",
+      "text": "Connections Verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Now, click on the add button to add the reading to the observation table.",
       "audio": "/audios/After 1st case connections, check.wav"
     },
     {
@@ -115,7 +115,7 @@
     },
     {
       "id": 23,
-      "text": "The readings are displayed on the voltmeter. Now, click on the Add button to add the reading to the observation table.",
+      "text": "The reading is displayed on the voltmeter. Now, click on the add button to add the reading to the observation table.",
       "audio": "/audios/After the voltage value is set.wav"
     },
     {
@@ -157,12 +157,12 @@
     },
     {
       "id": 31,
-      "text": "All load current and load power readings are added to the observation table. Now, click on the Calculate button to manually verify the theorem.",
+      "text": "The final reading is added to the observation table. Now, click on the Calculate button to theoretically verify the theorem.",
       "audio": "/audios/After reading is added for the third case.wav"
     },
     {
       "id": 32,
-      "text": "The power versus load resistance graph and the theoretical calculation panel are displayed. Enter the measured Thevenin voltage and resistance to calculate maximum power, then click Verify.",
+      "text": "The resistance and source values are displayed in the theoretical verification panel. Enter the calculated values in the input field, and click the Verify button to verify the theorem.",
       "audio": "/audios/After clicking the calculate button.wav"
     },
     {

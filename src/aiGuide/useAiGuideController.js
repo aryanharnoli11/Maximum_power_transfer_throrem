@@ -657,6 +657,7 @@ export const useAiGuideController = ({
             ...current.autoConnectUsed,
             [caseNumber]: true,
           },
+          [`case${caseNumber}ConnectionsVerified`]: true,
           [`case${caseNumber}Started`]: true,
           connectionStepIndex: stages.length,
           currentCase: caseNumber,
@@ -664,8 +665,12 @@ export const useAiGuideController = ({
         }))
 
         showGuideAlert({
-          description: 'Autoconnect completed. Click on the check button to verify the connections.',
-          target: '#check-button',
+          description: caseNumber === 1
+            ? 'Autoconnect completed. The digital multimeter is now displaying the Thevenin equivalent resistance value. Now, click on the add button to add the reading to the observation table.'
+            : caseNumber === 2
+              ? 'Autoconnect completed. Now switch ON the power supply and set the required voltage value.'
+              : 'Autoconnect completed. Turn ON the power supply at the same voltage setting used in Case 2.',
+          target: caseNumber === 1 ? '#add-reading-button' : '#power-toggle-button',
           title: 'Autoconnect Completed',
           type: 'success',
         }, '11')
@@ -805,6 +810,28 @@ export const useAiGuideController = ({
         }])
       }
 
+      case 'LOAD_READING_ADDED': {
+        const readingCount = Number(event.readingCount)
+        const description = readingCount === 1
+          ? 'Reading added successfully. Now, vary the load resistance (RL) by moving the resistance slider to take the next reading and then click the Add button.'
+          : readingCount === 2
+            ? 'Reading added successfully. Repeat this process until all ten readings have been added.'
+            : null
+
+        if (!description) {
+          return true
+        }
+
+        showGuideAlert({
+          description,
+          target: '#resistance-controls',
+          title: 'Reading Added Successfully',
+          type: 'success',
+        })
+
+        return true
+      }
+
       case 'CASE_CONNECTIONS_REMOVED': {
         const completedCase = Number(event.caseNumber)
 
@@ -875,6 +902,7 @@ export const useAiGuideController = ({
 
       case 'ADD_REJECTED':
       case 'REPORT_BLOCKED':
+      case 'RESISTANCE_SLIDER_BLOCKED':
       case 'CALCULATION_INPUT_INVALID': {
         showGuideAlert({
           description: event.description,

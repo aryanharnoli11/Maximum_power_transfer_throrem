@@ -547,6 +547,16 @@
   opacity: 0.72;
 }
 
+.resistance-slider__lock-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: not-allowed;
+}
+
 .resistance-slider--locked .resistance-slider__input {
   cursor: not-allowed;
 }

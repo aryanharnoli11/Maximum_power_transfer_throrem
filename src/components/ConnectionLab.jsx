@@ -49,6 +49,7 @@ const ConnectionLab = ({
   checkRequest,
   experimentCase,
   highlightedTerminalIds = [],
+  onAutoConnectCompleted,
   onCheckConnections,
   onGuideEvent,
   onTogglePower,
@@ -76,6 +77,7 @@ const ConnectionLab = ({
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
+  const onAutoConnectCompletedRef = useRef(onAutoConnectCompleted)
   const onCheckConnectionsRef = useRef(onCheckConnections)
   const onGuideEventRef = useRef(onGuideEvent)
   const scaleRef = useRef(getJsPlumbZoom(scale))
@@ -84,6 +86,10 @@ const ConnectionLab = ({
   const lastAutoConnectRequestRef = useRef(0)
   const [isLocked, setIsLocked] = useState(false)
   const [connectedTerminalIds, setConnectedTerminalIds] = useState([])
+
+  useEffect(() => {
+    onAutoConnectCompletedRef.current = onAutoConnectCompleted
+  }, [onAutoConnectCompleted])
 
   useEffect(() => {
     onCheckConnectionsRef.current = onCheckConnections
@@ -267,7 +273,10 @@ const ConnectionLab = ({
     event.preventDefault()
     event.stopPropagation()
 
-    if (isLocked) {
+    if (
+      isLocked
+      || containerRef.current.classList.contains('connection-lab--locked')
+    ) {
       return
     }
 
@@ -409,7 +418,10 @@ const ConnectionLab = ({
       setCase2ConnectionsRemoved(true)
     }
 
+    lockJsPlumbCircuit(instanceRef.current, containerRef.current)
+
     instanceRef.current.repaintEverything?.()
+    onAutoConnectCompletedRef.current?.(experimentCase)
     onGuideEventRef.current?.({
       caseNumber: experimentCase,
       type: 'AUTO_CONNECT_COMPLETED',

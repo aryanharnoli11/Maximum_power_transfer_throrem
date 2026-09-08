@@ -7,6 +7,7 @@ const ResistanceSlider = ({
   maxPosition,
   minPosition,
   onChange,
+  onDisabledInteraction,
   value,
 }) => {
   const config = RESISTANCE_SLIDER_CONFIG.load
@@ -55,6 +56,15 @@ const ResistanceSlider = ({
 
   return (
     <div className={`resistance-slider ${disabled ? 'resistance-slider--locked' : ''}`}>
+      {disabled && onDisabledInteraction ? (
+        <button
+          aria-label={`${label} resistance is locked`}
+          className="resistance-slider__lock-overlay"
+          onClick={onDisabledInteraction}
+          type="button"
+        />
+      ) : null}
+
       <label className="resistance-slider__label" htmlFor={`${label}-slider`}>
         {label.slice(0, 1)}
         <sub>{label.slice(1)}</sub> (&Omega;)

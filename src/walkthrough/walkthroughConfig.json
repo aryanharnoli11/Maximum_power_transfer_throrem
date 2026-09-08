@@ -14,7 +14,7 @@
     "en": "Aim"
   },
   "description": {
-    "en": "The aim of the experiment is to verify Thevenin’s Theorem."
+    "en": "To verify the Maximum Power Transfer Theorem."
   },
    "audio":"/walkthrough-audios/AIM.wav",
   "placement": "bottom"
@@ -83,7 +83,7 @@
     "en": "Calculate Button"
   },
   "description": {
-    "en": "The CALCULATE button displays the power versus load-resistance graph and fills the circuit values in the theoretical panel. Enter VTH and RTH to calculate and verify maximum power."
+    "en": "The CALCULATE button auto-fills the resistance and source values in the Theoretical Verification panel. For verification, you have to theoretically calculate Rth and Vth and verify them using the VERIFY button."
   },
   "audio": "/walkthrough-audios/calculate button.wav",
   "placement": "right"
@@ -117,7 +117,7 @@
     "en": "Resistance Slider"
   },
   "description": {
-    "en": "The RL slider remains disabled until VTH is recorded. It then starts at 0 Ω. Record the first load-power reading and move the slider one division at a time.\n\n**RL divisions:** 0, 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω."
+    "en": "For varying the load resistance (RL) by moving the resistance slider.\n\n**Range: ** Rl: 0 Ω to 1000 Ω."
   },
    "audio": "/walkthrough-audios/Resistance Sliders.wav",
   "placement": "right"
@@ -128,7 +128,7 @@
     "en": "DC Voltmeter"
   },
   "description": {
-    "en": "This voltmeter is used to measure the Thevenin equivalent voltage (VTH) across the load terminals with the load resistance disconnected. The measured VTH will be used later to calculate the load current.\n\n**Rating:** 0 - 50 V  "
+    "en": "This voltmeter is used to measure the Thevenin equivalent voltage (VTH) across the load terminals with the load resistance disconnected. The measured VTH will be used later to verify the theorem.\n\n**Rating:** 0 - 50 V  "
   },
    "audio": "/walkthrough-audios/DC Voltmeter.wav",
   "placement": "bottom"
@@ -140,7 +140,7 @@
     "en": "DC Ammeter"
   },
   "description": {
-    "en": "This ammeter is used to measure the load current (IL​) flowing through the load resistance (RL​). The measured load current is used to verify Thevenin's Theorem by comparing it with the theoretically calculated current.\n\n**Rating:** 0 - 5 mA"
+    "en": " This ammeter is used to measure the load current (IL​) flowing through the load resistance (RL​).\n\n**Rating:** 0 - 20 mA"
   },
    "audio": "/walkthrough-audios/DC Ammeter.wav",
   "placement": "bottom"
@@ -152,7 +152,7 @@
     "en": "Digital Multimeter"
   },
   "description": {
-    "en": "The digital multimeter is used in resistance (Ω) mode to measure the Thevenin equivalent resistance (RTH​) across the load terminals after removing the load resistance and deactivating the independent voltage source (by replacing it with a short circuit), the equivalent resistance across the load terminals is measured. "
+    "en": "The digital multimeter is used in resistance (Ω) mode to measure the Thevenin equivalent resistance (RTH​) across the load terminals after removing the load resistance and deactivating the independent voltage source (by replacing it with a short circuit), the equivalent resistance across the load terminals will be measured. "
   },
    "audio": "/walkthrough-audios/Digital Multimeter.wav",
   "placement": "bottom"
@@ -185,7 +185,7 @@
     "en": "Observation Table"
   },
   "description": {
-    "en": "The first section records the measured Thevenin resistance (RTH​) and voltage (VTH). The second records load resistance (RL), load current (IL), and load power (PL = IL² × RL)."
+    "en": " This table records the measured Thevenin equivalent resistance (RTH)​, Thevenin equivalent voltage (VTH),  Load resistance (RL), Load current (IL) and Power delivered (PL)."
   },
    "audio": "/walkthrough-audios/Observation Table.wav",
   "placement": "right"
@@ -196,7 +196,7 @@
     "en": "Equations"
   },
   "description": {
-    "en": "This section displays the equations used to determine the Thevenin resistance (RTH​), Thevenin voltage (VTH) and Load current (IL)."
+    "en": "This section displays the equations used to determine the Thevenin equivalent resistance (RTH​), Thevenin equivalent voltage (VTH), Load current (IL) and maximum power (PL,max)."
   },
    "audio": "/walkthrough-audios/Equations.wav",
   "placement": "top"
@@ -204,10 +204,10 @@
   "id": 18,
   "target": "#calculation-panel",
   "title": {
-    "en": "Calculation Panel"
+    "en": "Theoretical Verification"
   },
   "description": {
-    "en": "This section contains the power versus load-resistance graph and the theoretical maximum-power calculation. Enter VTH and RTH, then verify the calculated Pmax value."
+    "en": " This is the theoretical verification panel where the maximum power transfer theorem will be verified, and a graph will be plotted automatically between power and load resistance. Enter the required values and compare the calculated power with the measured power to verify the theorem."
   },
    "audio": "/walkthrough-audios/Calculation Panel.wav",
   "placement": "top"
@@ -218,7 +218,7 @@
     "en": "Generate Report"
   },
   "description": {
-    "en": " The Report button generates a summarised report of the simulation. After completing the observation table and theoretical calculations, generate the report. The report will include the time taken to complete the simulation, the apparatus used, recorded readings, the user-calculated result and the conclusion."
+    "en": "The Report button generates a summarised report of the simulation. After completing the observation table and theoretical verification, generate the report. The report will include the time taken to complete the simulation, no. of attempts, the apparatus used, recorded readings, the user-calculated result, graph and the conclusion."
   },
    "audio": "/walkthrough-audios/Generate Report.wav",
   "placement": "top"

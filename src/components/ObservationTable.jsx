@@ -4,6 +4,7 @@ import { formatCompactNumber } from '../utils/numberFormat.js'
 import { LOAD_RESISTANCE_VALUES } from '../utils/resistance.js'
 
 const OBSERVATION_ROW_COUNT = LOAD_RESISTANCE_VALUES.length
+const DISPLAY_DECIMAL_PLACES = 2
 const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => {
@@ -18,11 +19,11 @@ const ObservationTable = ({ observations }) => {
             <tr className="observation-table__group-headings">
               <th colSpan="2">
                 R<sub>TH</sub> (&Omega;)
-                {typeof summary?.rth === 'number' ? `: ${formatCompactNumber(summary.rth, 0)}` : ''}
+                {typeof summary?.rth === 'number' ? `: ${formatCompactNumber(summary.rth, DISPLAY_DECIMAL_PLACES)}` : ''}
               </th>
               <th colSpan="2">
                 V<sub>TH</sub> (V)
-                {typeof summary?.vth === 'number' ? `: ${formatCompactNumber(summary.vth, 3)}` : ''}
+                {typeof summary?.vth === 'number' ? `: ${formatCompactNumber(summary.vth, DISPLAY_DECIMAL_PLACES)}` : ''}
               </th>
             </tr>
             <tr className="observation-table__column-headings">
@@ -43,9 +44,9 @@ const ObservationTable = ({ observations }) => {
               return (
                 <tr key={index}>
                   <td>{hasLoadReading ? row?.id : ''}</td>
-                  <td>{hasLoadReading && typeof row?.rl === 'number' ? formatCompactNumber(row.rl, 0) : ''}</td>
-                  <td>{hasLoadReading ? formatCompactNumber(amperesToMilliamperes(row.il), 3) : ''}</td>
-                  <td>{loadPowerMilliwatts !== null ? formatCompactNumber(loadPowerMilliwatts, 3) : ''}</td>
+                  <td>{hasLoadReading && typeof row?.rl === 'number' ? formatCompactNumber(row.rl, DISPLAY_DECIMAL_PLACES) : ''}</td>
+                  <td>{hasLoadReading ? formatCompactNumber(amperesToMilliamperes(row.il), DISPLAY_DECIMAL_PLACES) : ''}</td>
+                  <td>{loadPowerMilliwatts !== null ? formatCompactNumber(loadPowerMilliwatts, DISPLAY_DECIMAL_PLACES) : ''}</td>
                 </tr>
               )
             })}

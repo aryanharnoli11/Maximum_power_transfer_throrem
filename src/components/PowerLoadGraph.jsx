@@ -178,7 +178,7 @@ const PowerLoadGraph = ({ observations = [] }) => {
                   r={isPeak ? 5.5 : 4}
                 >
                   <title>
-                    {`RL ${reading.resistance} Ω, PL ${formatCompactNumber(reading.loadPower, 3)} mW`}
+                    {`RL ${reading.resistance} Ω, PL ${formatCompactNumber(reading.loadPower, 2)} mW`}
                   </title>
                 </circle>
                 {isPeak ? (
@@ -188,7 +188,7 @@ const PowerLoadGraph = ({ observations = [] }) => {
                     x={getX(reading.resistance)}
                     y={getY(reading.loadPower) - 11}
                   >
-                    {`${formatCompactNumber(reading.loadPower, 3)} mW`}
+                    {`${formatCompactNumber(reading.loadPower, 2)} mW`}
                   </text>
                 ) : null}
               </g>
@@ -216,7 +216,7 @@ const PowerLoadGraph = ({ observations = [] }) => {
 
         {plottedReadings.length === 0 ? (
           <p className="power-load-graph-panel__empty">
-            Add load readings to generate the graph.
+            Add readings to generate the graph.
           </p>
         ) : null}
       </div>

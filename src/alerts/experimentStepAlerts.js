@@ -90,17 +90,17 @@ export const EXPERIMENT_ALERTS = {
   autoConnectCompleted: {
     audio: ALERT_AUDIO.autoConnect,
     description:
-      'Auto Connect completed successfully. Click CHECK button to verify the circuit connections.',
+      'Autoconnect completed. The digital multimeter is now displaying the Thevenin equivalent resistance value. Now, click on the add button to add the reading to the observation table.',
     icon: '✅',
     stepNumber: 1,
-    target: '#check-button',
+    target: '#add-reading-button',
     title: 'Auto Connect Completed',
     type: 'success',
   },
   connectionsRequired: {
     audio: ALERT_AUDIO.makeConnections,
     description:
-      'Please make the required circuit connections before clicking CHECK.',
+      'Please make the required connections as per the given instructions.',
     icon: '🔌',
     stepNumber: 1,
     target: '#circuit-panel',
@@ -144,7 +144,7 @@ export const EXPERIMENT_ALERTS = {
   connectionsVerified: {
   audio: ALERT_AUDIO.case1Verified,
   description:
-    'Connections verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Now Click ADD button to add the reading to the observation table.',
+    'Connections Verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Now, click on the add button to add the reading to the observation table.',
   icon: '✅',
   stepNumber: 2,
   target: '#check-button',
@@ -154,7 +154,7 @@ export const EXPERIMENT_ALERTS = {
 connectionsVerifiedCase2: {
   audio: ALERT_AUDIO.case2Verified,
   description:
-    'Connections verified successfully. Now switch ON the power supply and set the required voltage value.',
+    'Connections Verified successfully. Now switch ON the power supply and set the required voltage value.',
   icon: '✅',
   stepNumber: 2,
   target: '#power-toggle-button',
@@ -229,7 +229,7 @@ connectionsVerifiedCase3: {
   audio: ALERT_AUDIO.voltageSet,
   dedupeKey: 'step-5-adjust-voltage',
   description:
-    'The readings are now displayed on the voltmeter. Click ADD to record the reading.',
+    'The reading is displayed on the voltmeter. Now, click on the add button to add the reading to the observation table.',
   icon: '⚡',
   stepNumber: 5,
   target: '#voltage-control',
@@ -247,7 +247,7 @@ connectionsVerifiedCase3: {
  readingAdded: {
   audio: ALERT_AUDIO.addFinalReading,
   description:
-      'Final reading added to the observation table. Now click on the Calculate button to manually verify the theorem.',
+      'The final reading is added to the observation table. Now, click on the Calculate button to theoretically verify the theorem.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',
@@ -286,7 +286,7 @@ readingAddedCase2: {
  calculationReady: {
   audio: ALERT_AUDIO.calculate,
   description:
-         'The power graph and circuit values are displayed in the Calculations Panel. Enter the Thevenin voltage and resistance to calculate maximum power, then click the Verify button.',
+         'The resistance and source values are displayed in the theoretical verification panel. Enter the calculated values in the input field, and click the Verify button to verify the theorem.',
 
   icon: '🧮',
   stepNumber: 7,

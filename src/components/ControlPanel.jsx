@@ -9,6 +9,7 @@ const ControlPanel = ({
   minReadings,
   minResistancePosition,
   onGenerateReport,
+  onResistanceLocked,
   observations,
   readingCount,
   reportGenerated,
@@ -30,6 +31,7 @@ const ControlPanel = ({
           maxPosition={maxResistancePosition}
           minPosition={minResistancePosition}
           onChange={setRl}
+          onDisabledInteraction={onResistanceLocked}
           value={rl}
         />
 

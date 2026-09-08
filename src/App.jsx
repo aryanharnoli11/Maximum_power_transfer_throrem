@@ -80,6 +80,7 @@ const App = () => {
   const [checkRequest, setCheckRequest] = useState(0)
   const [resetRequest, setResetRequest] = useState(0)
   const [autoConnectRequest, setAutoConnectRequest] = useState(0)
+  const [autoConnectedCase, setAutoConnectedCase] = useState(null)
   const [connectionsVerified, setConnectionsVerified] = useState(false)
   const [sessionStart, setSessionStart] = useState(() => Date.now())
   const [showRth, setShowRth] = useState(false)
@@ -136,6 +137,15 @@ const App = () => {
 
     setRl(value)
   }
+
+  const handleLockedResistanceInteraction = useCallback(() => {
+    void notifyGuide({
+      description: 'Please perform the first two cases.',
+      target: '#resistance-controls',
+      title: 'Complete the First Two Cases',
+      type: 'RESISTANCE_SLIDER_BLOCKED',
+    })
+  }, [notifyGuide])
 
   useEffect(() => {
     let resizeTimer = 0
@@ -292,6 +302,27 @@ const App = () => {
     setAutoConnectRequest((current) => current + 1)
   }
 
+  const handleAutoConnectCompleted = useCallback((caseNumber) => {
+    const completedCase = Number(caseNumber)
+
+    if (![1, 2, 3].includes(completedCase)) {
+      return
+    }
+
+    setAutoConnectedCase(completedCase)
+    setConnectionsVerified(true)
+
+    if (completedCase === 1) {
+      setShowRth(true)
+      setShowMultimeter(true)
+      setStatus('Autoconnect completed. Click ADD to record the Thevenin equivalent resistance.')
+    } else if (completedCase === 2) {
+      setStatus('Autoconnect completed. Turn ON the power supply and set the required voltage.')
+    } else {
+      setStatus('Autoconnect completed. Turn ON the power supply and add the load-current reading.')
+    }
+  }, [])
+
   const recordObservation = () => {
     if (!connectionsVerified) {
       setStatus('Check the circuit connections before adding readings.')
@@ -409,8 +440,12 @@ const App = () => {
       } else {
         const nextResistance = LOAD_RESISTANCE_VALUES[nextReadingCount]
 
+        void notifyGuide({
+          readingCount: nextReadingCount,
+          type: 'LOAD_READING_ADDED',
+        })
         setStatus(
-          `PL = ${loadPowerMilliwatts.toFixed(3)} mW recorded at ${rl} Ω. Move RL one step to ${nextResistance} Ω.`,
+          `PL = ${loadPowerMilliwatts.toFixed(2)} mW recorded at ${rl} Ω. Move RL one step to ${nextResistance} Ω.`,
         )
         setReportGenerated(false)
         setReportPrinted(false)
@@ -447,6 +482,7 @@ const App = () => {
     setReportPrinted(false)
     setCheckRequest(0)
     setAutoConnectRequest(0)
+    setAutoConnectedCase(null)
     setExperimentCase(1)
     setConnectionsVerified(false)
     setMeasuredRth(null)
@@ -730,7 +766,7 @@ const App = () => {
                       )
                     ),
                     onCalculate: experimentCase !== 4,
-                    onCheck: false,
+                    onCheck: autoConnectedCase === experimentCase,
                     onPrint: false,
                   }}
                   onAdd={recordObservation}
@@ -749,6 +785,11 @@ const App = () => {
                   minResistancePosition={resistanceMinPosition}
                   observations={observations}
                   onGenerateReport={handleGenerateReport}
+                  onResistanceLocked={
+                    experimentCase < 3
+                      ? handleLockedResistanceInteraction
+                      : undefined
+                  }
                   readingCount={readingCount}
                   reportGenerated={reportGenerated}
                   rl={rl}
@@ -765,6 +806,7 @@ const App = () => {
                   experimentCase={experimentCase}
                   highlightedTerminalIds={highlightedTerminalIds}
                   key={`connection-lab-${resetRequest}`}
+                  onAutoConnectCompleted={handleAutoConnectCompleted}
                   onCheckConnections={handleCheckConnections}
                   onGuideEvent={notifyGuide}
                   onTogglePower={handleTogglePower}
@@ -803,7 +845,6 @@ const App = () => {
               onGuideEvent={notifyGuide}
               setUserCalculatedPmax={setUserCalculatedPmax}
               setVerificationResult={setVerificationResult}
-              verificationResult={verificationResult}
             />
             <footer className="site-footer">
               © 2026 Virtual Labs, IIT Roorkee
