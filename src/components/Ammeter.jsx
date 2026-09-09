@@ -8,8 +8,8 @@ import {
 import { amperesToMilliamperes } from '../utils/current.js'
 import { getMeterNeedleAngle } from '../utils/meterScale.js'
 
-// The printed 0-5 dial represents the experiment's 0-5 mA range.
-const METER_MAX_CURRENT_MILLIAMPERES = 5
+// Match the 0-20 mA scale printed on the ammeter artwork.
+const METER_MAX_CURRENT_MILLIAMPERES = 20
 
 const ammeterImages = {
   A1: ammeterImg,

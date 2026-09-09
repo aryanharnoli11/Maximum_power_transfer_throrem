@@ -237,7 +237,7 @@ const CalculationPanel = ({
 
       <section className="analysis-card theoretical-calculation-panel" id="calculation-panel">
         <header className="analysis-card__heading">
-          <h2>THEORETICAL CALCULATIONS</h2>
+          <h2>THEORETICAL VERIFICATION</h2>
         </header>
 
         <div className="theoretical-calculation-panel__body">

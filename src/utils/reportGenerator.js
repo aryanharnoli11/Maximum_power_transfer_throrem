@@ -932,7 +932,7 @@ tr:nth-child(even) {
       <p style="text-align: justify;">Kirchhoff's Current Law states that the algebraic sum of currents at a node is zero. For this experiment, the current through R<sub>1</sub> is the incoming current I<sub>1</sub>, and it divides into branch currents I<sub>2</sub> and I<sub>3</sub>. The verification condition is I<sub>1</sub> = I<sub>2</sub> + I<sub>3</sub>.</p>
 
       <h3>Simulation Summary</h3>
-      <p style="text-align: justify;">The circuit was connected and verified, the resistance values were fixed, the DC supply voltage was varied, ammeter readings were recorded, and the current versus voltage graph was plotted after collecting the required readings.</p>
+      <p style="text-align: justify;">The guided walkthrough familiarised the user with the simulation interface. The Thevenin equivalent resistance (Rth) was measured using a digital multimeter. The Thevenin equivalent voltage (Vth) was then measured using a voltmeter. The load resistance was then varied one value at a time using the resistance slider, and the corresponding load current (IL) and power (PL) readings were recorded in the observation table for each resistance value. Thereafter, a graph of power v/s load resistance was plotted. The theoretical maximum power was calculated and compared with the measured value to verify the Maximum Power Transfer Theorem.</p>
 
       <h3>Components and Key Parameters</h3>
       <ul class="two-column-list">

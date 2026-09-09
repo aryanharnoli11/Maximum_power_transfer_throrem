@@ -554,10 +554,6 @@ const App = () => {
 
     const reportOpened = generateTheveninReport({
       observations,
-      r1,
-      r2,
-      r3,
-      rl,
       vth: calculatedValues?.vth ?? 0,
       rth: calculatedValues?.rth ?? 0,
       calculatedPmax: Number(userCalculatedPmax),

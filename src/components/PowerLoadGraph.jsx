@@ -77,7 +77,9 @@ const PowerLoadGraph = ({ observations = [] }) => {
   return (
     <section className="analysis-card power-load-graph-panel" id="power-load-graph-panel">
       <header className="analysis-card__heading">
-        <h2>POWER VS LOAD RESISTANCE GRAPH</h2>
+        <h2>
+          P<sub>L,max</sub> VS R<sub>L</sub> GRAPH
+        </h2>
       </header>
 
       <div className="power-load-graph-panel__body">
@@ -201,7 +203,9 @@ const PowerLoadGraph = ({ observations = [] }) => {
             x={CHART_PADDING.left + chartInnerWidth / 2}
             y={CHART_HEIGHT - 8}
           >
-            Load Resistance, RL (Ω)
+            Load Resistance, R
+            <tspan baselineShift="sub" fontSize="8">L</tspan>
+            {' (Ω)'}
           </text>
           <text
             className="power-load-graph__axis-title"
@@ -210,7 +214,9 @@ const PowerLoadGraph = ({ observations = [] }) => {
             x={14}
             y={CHART_PADDING.top + chartInnerHeight / 2}
           >
-            Load Power, PL (mW)
+            Load Power, P
+            <tspan baselineShift="sub" fontSize="8">L,max</tspan>
+            {' (mW)'}
           </text>
         </svg>
 

@@ -59,7 +59,7 @@
     "en": "Check Button"
   },
   "description": {
-    "en": "The CHECK button verifies all the connections to ensure that they are correct."
+    "en": "The CHECK button verifies all the connections to ensure that they are correct.\n\n**Note:** If a wire is connected incorrectly, click the corresponding label number to remove the connection."
   },
    "audio": "/walkthrough-audios/Check Button.wav",
   "placement": "right"
@@ -83,7 +83,7 @@
     "en": "Calculate Button"
   },
   "description": {
-    "en": "The CALCULATE button auto-fills the resistance and source values in the Theoretical Verification panel."
+    "en": "The CALCULATE button auto-fills the resistance and source values in the Theoretical Verification panel. For verification, you have to theoretically calculate Rth and Vth and verify them using the VERIFY button."
   },
   "audio": "/walkthrough-audios/calculate button.wav",
   "placement": "right"
@@ -117,7 +117,7 @@
     "en": "Resistance Slider"
   },
   "description": {
-    "en": "For varying the load resistance (RL) by moving the resistance slider."
+    "en": "For varying the load resistance (RL) by moving the resistance slider.\n\n**Range RL:** 0 - 1000 Ω"
   },
    "audio": "/walkthrough-audios/Resistance Slider.wav",
   "placement": "right"

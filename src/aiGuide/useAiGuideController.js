@@ -95,13 +95,25 @@ const createInitialState = () => ({
   voltageReadingDisplayed: false,
   walkthroughCompleted: false,
   walkthroughNarrationCompleted: false,
-  wrongConnectionCount: 0,
 })
 
 const isSamePair = (sourceId, targetId, pair) => (
   (sourceId === pair[0] && targetId === pair[1])
   || (sourceId === pair[1] && targetId === pair[0])
 )
+
+const formatConnectionPairs = (pairs) => {
+  if (!Array.isArray(pairs) || pairs.length === 0) {
+    return []
+  }
+
+  return pairs.map(([sourceId, targetId]) => {
+    const sourceNumber = String(sourceId).replace('-endpoint', '')
+    const targetNumber = String(targetId).replace('-endpoint', '')
+
+    return `${sourceNumber}–${targetNumber}`
+  })
+}
 
 const getConnectionAlertTarget = (caseNumber) => (
   caseNumber === 1 ? '#circuit-panel' : '#circuit-panel'
@@ -430,7 +442,6 @@ export const useAiGuideController = ({
       [stateKey]: true,
       connectionStepIndex: 0,
       currentCase: caseNumber,
-      wrongConnectionCount: 0,
     }))
 
     if (!stateRef.current.guideStarted) {
@@ -578,7 +589,6 @@ export const useAiGuideController = ({
           updateState((current) => ({
             ...current,
             connectionStepIndex: nextIndex,
-            wrongConnectionCount: 0,
           }))
 
           if (nextIndex < stages.length) {
@@ -592,35 +602,19 @@ export const useAiGuideController = ({
           ])
         }
 
-        const wrongConnectionCount =
-          stateRef.current.wrongConnectionCount + 1
-        const hasMultipleWrongConnections = wrongConnectionCount > 1
-        const errorInstructionId = hasMultipleWrongConnections ? '10' : '9'
-        const errorText = hasMultipleWrongConnections
-          ? 'Some connections are wrong.'
-          : 'This connection is wrong.'
-
-        updateState((current) => ({
-          ...current,
-          wrongConnectionCount,
-        }))
         showGuideAlert({
-          description: errorText,
+          description: 'This connection is wrong.',
           target: getConnectionAlertTarget(caseNumber),
-          title: hasMultipleWrongConnections
-            ? 'Wrong Connections'
-            : 'Wrong Connection',
+          title: 'Wrong Connection',
           type: 'error',
-        }, errorInstructionId)
+        }, '9')
 
         return runInstructionSequence([
           {
             force: true,
-            instructionId: errorInstructionId,
+            instructionId: '9',
             playbackId: `wrong-connection:${Date.now()}`,
-            priority: hasMultipleWrongConnections
-              ? AUDIO_PRIORITY.ERROR
-              : AUDIO_PRIORITY.WRONG_CONNECTION,
+            priority: AUDIO_PRIORITY.WRONG_CONNECTION,
             setCurrentInstruction: false,
           },
           {
@@ -668,7 +662,6 @@ export const useAiGuideController = ({
           [`case${caseNumber}Started`]: true,
           connectionStepIndex: stages.length,
           currentCase: caseNumber,
-          wrongConnectionCount: 0,
         }))
 
         showGuideAlert({
@@ -736,12 +729,28 @@ export const useAiGuideController = ({
         }
 
         const totalConnections = Number(event.result?.totalConnections ?? 0)
+        const matchedConnections = Number(event.result?.matchedCount ?? 0)
         const requiredConnections = REQUIRED_CONNECTION_COUNTS[caseNumber] ?? 0
+        const wrongPairs = Array.isArray(event.result?.wrongPairs)
+          ? event.result.wrongPairs
+          : []
+        const missingPairs = Array.isArray(event.result?.missingPairs)
+          ? event.result.missingPairs
+          : []
+        const wrongConnections = Array.isArray(event.result?.wrongPairs)
+          ? wrongPairs.length
+          : Math.max(totalConnections - matchedConnections, 0)
+        const missingConnections = Array.isArray(event.result?.missingPairs)
+          ? missingPairs.length
+          : Math.max(requiredConnections - matchedConnections, 0)
         const pendingStage =
           CONNECTION_STAGES[caseNumber]?.[stateRef.current.connectionStepIndex]
 
-        if (totalConnections < requiredConnections) {
+        if (wrongConnections === 0 && missingConnections > 0) {
           showGuideAlert({
+            connectionDetails: {
+              missing: formatConnectionPairs(missingPairs),
+            },
             description: 'Please make the required connections as per the given instructions.',
             target: '#circuit-panel',
             title: 'Required Connections',
@@ -757,18 +766,31 @@ export const useAiGuideController = ({
           }])
         }
 
+        const hasMultipleWrongConnections = wrongConnections > 1
+        const errorInstructionId = hasMultipleWrongConnections ? '10' : '9'
+        const errorText = hasMultipleWrongConnections
+          ? 'Some connections are wrong.'
+          : 'This connection is wrong.'
         showGuideAlert({
-          description: 'Some connections are wrong.',
+          connectionDetails: {
+            missing: formatConnectionPairs(missingPairs),
+            wrong: formatConnectionPairs(wrongPairs),
+          },
+          description: errorText,
           target: '#circuit-panel',
-          title: 'Wrong Connections',
+          title: hasMultipleWrongConnections
+            ? 'Wrong Connections'
+            : 'Wrong Connection',
           type: 'error',
-        }, '10')
+        }, errorInstructionId)
 
         const entries = [{
           force: true,
-          instructionId: '10',
-          playbackId: `some-connections-wrong:${Date.now()}`,
-          priority: AUDIO_PRIORITY.ERROR,
+          instructionId: errorInstructionId,
+          playbackId: `wrong-connections-check:${Date.now()}`,
+          priority: hasMultipleWrongConnections
+            ? AUDIO_PRIORITY.ERROR
+            : AUDIO_PRIORITY.WRONG_CONNECTION,
           setCurrentInstruction: false,
         }]
 

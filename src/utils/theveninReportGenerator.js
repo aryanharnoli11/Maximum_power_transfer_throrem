@@ -5,14 +5,14 @@ const REPORT_CONTENT = {
   documentTitle: 'Maximum Power Transfer Simulation Report',
   reportHeading: 'Virtual Labs Simulation Report',
   labName: 'AI-Enhanced Basic Electrical Science Lab',
-  experimentTitle: 'TO VERIFY MAXIMUM POWER TRANSFER THEOREM',
+  experimentTitle: 'To Verify the Maximum Power Transfer Theorem',
   aim: 'To study and verify the Maximum Power Transfer Theorem by varying the load resistance and comparing the measured load power with the theoretical maximum power.',
   simulationSummary: 'The Thevenin resistance and voltage were measured first. The load resistance was then varied through the specified values, and the corresponding load current and power were recorded. A power-versus-load-resistance graph was plotted and the theoretical maximum power was calculated using Pmax = Vth² / (4 × Rth).',
   apparatus: [
-    ['Power Supply: 15V DC', 'AC/DC Voltmeter: 0 - 50 V', 'AC/DC Ammeter: 0 - 5 mA', 'Digital Multimeter', 'RL: 0 Ω - 1000 Ω'],
+    ['Power Supply: 15V DC', 'AC/DC Voltmeter: 0 - 50 V', 'AC/DC Ammeter: 0 - 20 mA', 'Digital Multimeter', 'RL: 0  - 1000 Ω'],
     ['R₁: 466 Ω', 'R₂: 216 Ω', 'R₃: 470 Ω', 'Connecting Leads'],
   ],
-  conclusion: 'The Maximum Power Transfer Theorem has been verified successfully. Maximum load power occurs when the load resistance is equal to the Thevenin resistance of the source network.',
+  conclusion: 'The Maximum Power Transfer Theorem has been verified successfully. It was observed that the maximum power was transferred to the load when the load resistance was equal to the source (Thevenin) equivalent resistance.',
   footer: '© 2026 Virtual Labs, IIT Roorkee',
 }
 
@@ -23,12 +23,22 @@ const escapeHtml = (value) => String(value)
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#39;')
 
+const formatReportReading = (value) => {
+  const numericValue = Number(value)
+
+  return Number.isFinite(numericValue) ? numericValue.toFixed(2) : ''
+}
+
+const formatLoadResistance = (value) => {
+  const numericValue = Number(value)
+
+  return Number.isFinite(numericValue) ? numericValue.toFixed(0) : ''
+}
+
 export const generateTheveninReport = ({
   observations,
-  r1,
-  r2,
-  r3,
-  rl,
+  rth,
+  vth,
   calculatedPmax,
   sessionStart,
 }) => {
@@ -64,9 +74,9 @@ export const generateTheveninReport = ({
       (row, index) => `
         <tr>
           <td>${index + 1}</td>
-          <td>${Number(row.rl).toFixed(0)}</td>
-          <td>${amperesToMilliamperes(row.il).toFixed(3)}</td>
-          <td>${((row.il ** 2) * row.rl * 1000).toFixed(3)}</td>
+          <td>${formatLoadResistance(row.rl)}</td>
+          <td>${formatReportReading(amperesToMilliamperes(row.il))}</td>
+          <td>${formatReportReading((row.il ** 2) * row.rl * 1000)}</td>
         </tr>
       `,
     )
@@ -408,7 +418,11 @@ tr:nth-child(even) {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 13px;
+  color: #2d3e50;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: 1.5;
 }
 .calc-row {
   display: flex;
@@ -424,12 +438,16 @@ tr:nth-child(even) {
   padding-bottom: 0;
 }
 .calc-row .calc-label {
-  color: #50657c;
-  font-weight: 600;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 .calc-row .calc-value {
-  font-weight: 700;
-  color: #16324b;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
   text-align: right;
 }
 .calc-formula {
@@ -547,8 +565,7 @@ tr:nth-child(even) {
 .pdf-exporting .summary-sub-section p,
 .pdf-exporting .summary-list,
 .pdf-exporting th,
-.pdf-exporting td,
-.pdf-exporting .calc-block {
+.pdf-exporting td {
   font-size: 10px !important;
 }
 .pdf-exporting .report-logo,
@@ -704,8 +721,7 @@ tr:nth-child(even) {
   .summary-sub-section p,
   .summary-list,
   th,
-  td,
-  .calc-block {
+  td {
     font-size: 10px;
   }
   .report-logo,
@@ -851,29 +867,6 @@ tr:nth-child(even) {
       </div>
 
       <div class="section">
-        <h2>Experiment Parameters</h2>
-        <div class="param-grid">
-          <div class="param-card">
-            <span class="param-label">R<sub>1</sub></span>
-            <span class="param-value">${Number(r1).toFixed(0)} &Omega;</span>
-          </div>
-          <div class="param-card">
-            <span class="param-label">R<sub>2</sub></span>
-            <span class="param-value">${Number(r2).toFixed(0)} &Omega;</span>
-          </div>
-          <div class="param-card">
-            <span class="param-label">R<sub>3</sub></span>
-            <span class="param-value">${Number(r3).toFixed(0)} &Omega;</span>
-          </div>
-          <div class="param-card">
-            <span class="param-label">R<sub>L</sub></span>
-            <span class="param-value">${Number(rl).toFixed(0)} &Omega;</span>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="section">
         <h2>Results</h2>
 
         <div class="results-stack">
@@ -884,8 +877,8 @@ tr:nth-child(even) {
               <table>
                 <thead>
                   <tr>
-                    <th colspan="2">R<sub>TH</sub> (&Omega;)</th>
-                    <th colspan="2">V<sub>TH</sub> (V)</th>
+                    <th colspan="2">R<sub>TH</sub> (&Omega;): ${formatReportReading(rth)}</th>
+                    <th colspan="2">V<sub>TH</sub> (V): ${formatReportReading(vth)}</th>
                   </tr>
                   <tr>
                     <th>S.No.</th>
@@ -905,8 +898,8 @@ tr:nth-child(even) {
             <h3>Theoretical Verification</h3>
             <div class="calc-block">
               <div class="calc-row">
-                <span class="calc-label">Calculated Maximum Power (P<sub>max</sub>):</span>
-                <span class="calc-value">${calculatedPmax.toFixed(3)} mW</span>
+                <span class="calc-label">Calculated Maximum Power (P<sub>L,max</sub>):</span>
+                <span class="calc-value">${formatReportReading(calculatedPmax)} mW</span>
               </div>
             </div>
           </div>

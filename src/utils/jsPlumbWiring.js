@@ -302,19 +302,34 @@ export const validateTheveninConnections = (
   experimentCase,
 ) => {
 
-  const totalConnections = getAllConnections(instance).length
+  const connections = getAllConnections(instance)
+  const totalConnections = connections.length
 
   const validatePairs = (requiredPairs) => {
-    const matchedCount = requiredPairs.filter(([firstId, secondId]) => (
-      hasConnectionBetween(instance, firstId, secondId)
-    )).length
+    const missingPairs = requiredPairs.filter(([firstId, secondId]) => (
+      !hasConnectionBetween(instance, firstId, secondId)
+    ))
+    const wrongPairs = connections
+      .map((connection) => [
+        connection.sourceId || connection.source?.id,
+        connection.targetId || connection.target?.id,
+      ])
+      .filter(([sourceId, targetId]) => (
+        sourceId
+        && targetId
+        && !requiredPairs.some(([firstId, secondId]) => (
+          (sourceId === firstId && targetId === secondId)
+          || (sourceId === secondId && targetId === firstId)
+        ))
+      ))
+    const matchedCount = requiredPairs.length - missingPairs.length
 
     return {
-      isCorrect:
-        matchedCount === requiredPairs.length
-        && totalConnections === requiredPairs.length,
+      isCorrect: missingPairs.length === 0 && wrongPairs.length === 0,
       matchedCount,
+      missingPairs,
       totalConnections,
+      wrongPairs,
     }
   }
 
@@ -351,7 +366,9 @@ export const validateTheveninConnections = (
   return {
     isCorrect: false,
     matchedCount: 0,
+    missingPairs: [],
     totalConnections,
+    wrongPairs: [],
   }
 }
 

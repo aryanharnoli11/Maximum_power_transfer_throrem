@@ -24,6 +24,7 @@ const LabAlertCard = ({ alert, onDismiss }) => {
     canGoNext,
     canGoPrevious,
     confirmLabel = 'OK',
+    connectionDetails,
     description,
     icon,
     id,
@@ -48,6 +49,21 @@ const LabAlertCard = ({ alert, onDismiss }) => {
   const descriptionId = `lab-alert-description-${id}`
   const role = type === 'error' || type === 'warning' ? 'alert' : 'status'
   const showTutorialControls = Boolean(tutorialMode || onNext || onPrevious)
+  const connectionDetailGroups = [
+    {
+      key: 'wrong',
+      label: 'Wrong connection',
+      values: connectionDetails?.wrong,
+    },
+    {
+      key: 'missing',
+      label: 'Missing connection',
+      values: connectionDetails?.missing,
+    },
+  ].filter(({ values }) => Array.isArray(values) && values.length > 0)
+  const hasDescription = Boolean(
+    description || connectionDetailGroups.length > 0,
+  )
 
   const dismiss = useCallback((reason = 'dismiss', callClose = true) => {
     if (isClosing) {
@@ -123,7 +139,7 @@ const handleEnded = (event) => {
 
   return (
     <article
-      aria-describedby={description ? descriptionId : undefined}
+      aria-describedby={hasDescription ? descriptionId : undefined}
       aria-labelledby={titleId}
       className={`lab-alert-card lab-alert-card--${type} ${isClosing ? 'lab-alert-card--closing' : ''}`}
       data-placement={placement}
@@ -139,7 +155,21 @@ const handleEnded = (event) => {
             <span>{type.toUpperCase()}</span>
           </div>
           <h2 id={titleId}><ElectricalText text={title} /></h2>
-          {description ? <p id={descriptionId}><ElectricalText text={description} /></p> : null}
+          {hasDescription ? (
+            <div className="lab-alert-card__message" id={descriptionId}>
+              {description ? <p><ElectricalText text={description} /></p> : null}
+              {connectionDetailGroups.length > 0 ? (
+                <dl className="lab-alert-card__connection-details">
+                  {connectionDetailGroups.map(({ key, label, values }) => (
+                    <div className="lab-alert-card__connection-row" key={key}>
+                      <dt>{label}{values.length > 1 ? 's' : ''}</dt>
+                      <dd>{values.join(', ')}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className="lab-alert-card__tools">
