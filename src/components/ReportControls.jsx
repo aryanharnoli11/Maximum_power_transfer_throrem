@@ -47,6 +47,12 @@ const FormulaFraction = ({ denominator, numerator }) => (
   </span>
 )
 
+const FormulaSymbol = ({ children, text }) => (
+  <span className="floating-formula-panel__symbol">
+    {children ?? <ElectricalText text={text} />}
+  </span>
+)
+
 const FormulaEquation = ({ formulaId }) => {
   if (formulaId === 'rth') {
     return (
@@ -54,9 +60,9 @@ const FormulaEquation = ({ formulaId }) => {
         aria-label="R T H equals R 3 plus R 1 times R 2 divided by R 1 plus R 2"
         className="floating-formula-panel__equation-row"
       >
-        <ElectricalText text="RTH" />
+        <FormulaSymbol text="RTH" />
         <span aria-hidden="true">=</span>
-        <ElectricalText text="R3" />
+        <FormulaSymbol text="R3" />
         <span aria-hidden="true">+</span>
         <FormulaFraction numerator="R1 × R2" denominator="R1 + R2" />
       </span>
@@ -69,9 +75,9 @@ const FormulaEquation = ({ formulaId }) => {
         aria-label="V T H equals V S times R 2 divided by R 1 plus R 2"
         className="floating-formula-panel__equation-row"
       >
-        <ElectricalText text="VTH" />
+        <FormulaSymbol text="VTH" />
         <span aria-hidden="true">=</span>
-        <ElectricalText text="VS" />
+        <FormulaSymbol text="VS" />
         <span aria-hidden="true">×</span>
         <FormulaFraction numerator="R2" denominator="R1 + R2" />
       </span>
@@ -81,12 +87,21 @@ const FormulaEquation = ({ formulaId }) => {
   if (formulaId === 'pmax') {
     return (
       <span
-        aria-label="Maximum power equals Thevenin voltage squared divided by four times Thevenin resistance"
+        aria-label="Maximum load power equals Thevenin voltage squared divided by four times Thevenin resistance"
         className="floating-formula-panel__equation-row"
       >
-        <ElectricalText text="Pmax" />
+        <FormulaSymbol>
+          P<sub>L,max</sub>
+        </FormulaSymbol>
         <span aria-hidden="true">=</span>
-        <FormulaFraction numerator="VTH²" denominator="4 × RTH" />
+        <FormulaFraction
+          denominator="4 × RTH"
+          numerator={(
+            <FormulaSymbol>
+              V<sup>2</sup><sub>TH</sub>
+            </FormulaSymbol>
+          )}
+        />
       </span>
     )
   }
@@ -96,20 +111,18 @@ const FormulaEquation = ({ formulaId }) => {
       aria-label="I L equals V T H divided by R T H plus R L"
       className="floating-formula-panel__equation-row"
     >
-      <ElectricalText text="IL" />
+      <FormulaSymbol text="IL" />
       <span aria-hidden="true">=</span>
       <FormulaFraction numerator="VTH" denominator="RTH + RL" />
     </span>
   )
 }
 const ReportControls = ({
-  minReadings,
   onGenerateReport,
-  readingCount,
   reportGenerated,
+  theoremVerified,
 }) => {
   const [formulasOpen, setFormulasOpen] = useState(false)
-  const readingsReady = readingCount >= minReadings
 
   return (
   <div className="report-controls">
@@ -124,7 +137,7 @@ const ReportControls = ({
       >
 
         <div className="floating-formula-panel__header">
-          <h3 id="formula-panel-title">Maximum Power Transfer Equations</h3>
+          <h3 id="formula-panel-title">Equations</h3>
           <button
             aria-label="Close equations panel"
             className="floating-formula-panel__close"
@@ -150,16 +163,16 @@ const ReportControls = ({
               ) : null}
 
               {section.steps.length > 0 ? (
-                <ol className="floating-formula-panel__steps">
+                <ul className="floating-formula-panel__steps">
                   {section.steps.map((step) => (
                     <li key={step}><ElectricalText text={step} /></li>
                   ))}
-                </ol>
+                </ul>
               ) : null}
 
               <div className="floating-formula-panel__formula">
                 <strong className="floating-formula-panel__formula-label">
-                  Direct Formula
+                  Formula
                 </strong>
                 <FormulaEquation formulaId={section.id} />
               </div>
@@ -175,7 +188,7 @@ const ReportControls = ({
       id="generate-report-button"
       type="button"
       className="report-button"
-      disabled={!readingsReady}
+      disabled={!theoremVerified}
       aria-label="Generate Report"
       data-report-generated={reportGenerated ? 'true' : 'false'}
       onClick={onGenerateReport}

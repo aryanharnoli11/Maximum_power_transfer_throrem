@@ -11,6 +11,11 @@ const INPUT_TOLERANCES = {
   vth: 0.005,
 }
 
+const INPUT_RANGES = {
+  rth: { min: 0, max: 1000 },
+  vth: { min: 0, max: 100 },
+}
+
 const COMPARISON_EPSILON = 1e-9
 const DISPLAY_DECIMAL_PLACES = 2
 const MAXIMUM_POWER_TOLERANCE_MILLIWATTS = 0.02
@@ -113,6 +118,20 @@ const CalculationPanel = ({
   }, [calculatedMaximumPowerDisplay, setUserCalculatedPmax])
 
   const handleTheveninInputChange = (parameter, value) => {
+    const { min, max } = INPUT_RANGES[parameter]
+    const numericValue = Number(value)
+
+    if (
+      value !== ''
+      && (
+        !Number.isFinite(numericValue)
+        || numericValue < min
+        || numericValue > max
+      )
+    ) {
+      return
+    }
+
     setTheveninInputs((current) => ({
       ...current,
       [parameter]: value,
@@ -263,12 +282,14 @@ const CalculationPanel = ({
                     aria-invalid={incorrectInputs.vth}
                     className={`maximum-power-input${incorrectInputs.vth ? ' maximum-power-input--error' : ''}`}
                     disabled={!calculationDone}
+                    max={INPUT_RANGES.vth.max}
+                    min={INPUT_RANGES.vth.min}
                     onBlur={() => handleTheveninInputBlur('vth')}
                     onChange={(event) => handleTheveninInputChange('vth', event.target.value)}
                     onWheel={preventMouseWheelAdjustment}
-                    placeholder="Enter value"
+                    placeholder="Enter Value"
                     step="any"
-                    title="Enter VTH in volts"
+                    title="Enter VTH from 0 to 100 volts"
                     type="number"
                     value={theveninInputs.vth}
                   />
@@ -284,12 +305,14 @@ const CalculationPanel = ({
                       aria-invalid={incorrectInputs.rth}
                       className={`maximum-power-input${incorrectInputs.rth ? ' maximum-power-input--error' : ''}`}
                       disabled={!calculationDone}
+                      max={INPUT_RANGES.rth.max}
+                      min={INPUT_RANGES.rth.min}
                       onBlur={() => handleTheveninInputBlur('rth')}
                       onChange={(event) => handleTheveninInputChange('rth', event.target.value)}
                       onWheel={preventMouseWheelAdjustment}
-                      placeholder="Enter value"
+                      placeholder="Enter Value"
                       step="any"
-                      title="Enter RTH in ohms"
+                      title="Enter RTH from 0 to 1000 ohms"
                       type="number"
                       value={theveninInputs.rth}
                     />

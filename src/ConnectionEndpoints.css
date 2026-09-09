@@ -382,6 +382,14 @@
   --terminal-base-left: 140.8px;
 }
 
+/* The ammeter sockets are wider than the other equipment sockets. */
+.connection-terminal--endpoint-3,
+.connection-terminal--endpoint-4 {
+  --jtk-endpoint-radius: 16;
+  --terminal-size: 32px;
+  margin: -2px;
+}
+
 .connection-lab .jtk-endpoint--terminal-5,
 .connection-terminal--endpoint-5 {
   --jtk-endpoint-offset-x: -2.4px;
@@ -411,7 +419,7 @@
 }
 
 .connection-terminal--endpoint-7 {
-  --terminal-base-top: 151.2px;
+  --terminal-base-top: 150.2px;
   --terminal-base-left: 37.6px;
 }
 
@@ -422,7 +430,7 @@
 }
 
 .connection-terminal--endpoint-8 {
-  --terminal-base-top: 151.2px;
+  --terminal-base-top: 150.2px;
   --terminal-base-left: 89.6px;
 }
 

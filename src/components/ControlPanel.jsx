@@ -6,15 +6,14 @@ import SectionCard from './SectionCard.jsx'
 const ControlPanel = ({
   locked,
   maxResistancePosition,
-  minReadings,
   minResistancePosition,
   onGenerateReport,
   onResistanceLocked,
   observations,
-  readingCount,
   reportGenerated,
   rl,
   setRl,
+  theoremVerified,
 }) => (
   <>
     <SectionCard
@@ -41,10 +40,9 @@ const ControlPanel = ({
     <ObservationTable observations={observations} />
 
     <ReportControls
-      minReadings={minReadings}
       onGenerateReport={onGenerateReport}
-      readingCount={readingCount}
       reportGenerated={reportGenerated}
+      theoremVerified={theoremVerified}
     />
   </>
 )

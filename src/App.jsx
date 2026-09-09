@@ -109,6 +109,9 @@ const App = () => {
     typeof row.il === 'number' && Number.isFinite(row.il)
   ))
   const loadReadingCount = loadObservations.length
+  const verificationSucceeded = verificationResult.includes(
+    'Verified Successfully',
+  )
   const expectedLoadResistance = (
     LOAD_RESISTANCE_VALUES[loadReadingCount] ?? null
   )
@@ -511,6 +514,16 @@ const App = () => {
   }
 
   const handleGenerateReport = async () => {
+    if (!verificationSucceeded) {
+      void notifyGuide({
+        description: 'Please verify the theorem before generating the report.',
+        target: '#calculation-panel',
+        title: 'Verification Required',
+        type: 'REPORT_BLOCKED',
+      })
+      return
+    }
+
     if (!calculationDone) {
       void notifyGuide({
         description: 'Please click CALCULATE before generating report.',
@@ -707,9 +720,6 @@ const App = () => {
   const highlightedTerminalIds = (
     guideHighlights[Number(activeInstructionId)] ?? []
   )
-  const verificationSucceeded = verificationResult.includes(
-    'Verified Successfully',
-  )
   const activeInstructionStep = (
     experimentCase === 1
         || (experimentCase === 2 && !case1ConnectionsRemoved)
@@ -792,7 +802,6 @@ const App = () => {
                 <ControlPanel
                   locked={resistanceSliderDisabled}
                   maxResistancePosition={resistanceMaxPosition}
-                  minReadings={MIN_OBSERVATION_READINGS}
                   minResistancePosition={resistanceMinPosition}
                   observations={observations}
                   onGenerateReport={handleGenerateReport}
@@ -801,10 +810,10 @@ const App = () => {
                       ? handleLockedResistanceInteraction
                       : undefined
                   }
-                  readingCount={readingCount}
                   reportGenerated={reportGenerated}
                   rl={rl}
                   setRl={handleResistanceChange}
+                  theoremVerified={verificationSucceeded}
                 />
               </aside>
 

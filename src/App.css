@@ -2126,6 +2126,7 @@ background:
   font-size: 10px;
   font-weight: 650;
   line-height: 1.42;
+  list-style-type: disc;
   text-align: justify;
 }
 
@@ -2164,6 +2165,11 @@ background:
 
 .floating-formula-panel__equation-row sub {
   font-size: 0.65em;
+}
+
+.floating-formula-panel__symbol {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .floating-formula-panel__fraction {
