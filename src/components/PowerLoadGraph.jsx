@@ -213,7 +213,7 @@ const PowerLoadGraph = ({ observations = [] }) => {
             y={CHART_PADDING.top + chartInnerHeight / 2}
           >
             Load Power, P
-            <tspan baselineShift="sub" fontSize="8">L,max</tspan>
+            <tspan baselineShift="sub" fontSize="8">L</tspan>
             {' (mW)'}
           </text>
         </svg>

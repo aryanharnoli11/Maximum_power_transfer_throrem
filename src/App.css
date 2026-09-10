@@ -401,6 +401,22 @@
   text-align: justify;
 }
 
+.action-instructions-panel__guide-note {
+  margin: 0 0 8.8px;
+  border: 0;
+  color: #392518;
+  background: transparent;
+  font-size: 10.4px;
+  font-weight: 700;
+  line-height: 1.35;
+  animation: none;
+}
+
+.action-instructions-panel__guide-note strong {
+  color: #6d3d1c;
+  font-weight: 900;
+}
+
 .action-instructions-panel__steps {
   display: grid;
   gap: 8.8px;

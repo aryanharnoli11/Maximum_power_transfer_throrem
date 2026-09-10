@@ -220,6 +220,10 @@ const ActionButtons = ({
             className="action-instructions-panel__body"
             ref={instructionsBodyRef}
           >
+            <p className="action-instructions-panel__guide-note">
+              <strong>AI Guide:</strong> The AI guide will assist you in performing the
+              simulation accurately at each step.
+            </p>
             <ol className="action-instructions-panel__steps">
 
   <li {...getInstructionProps('step1')}>
@@ -235,9 +239,9 @@ const ActionButtons = ({
   <strong>Case 1 (Measure <ElectricalText text="RTH" />):</strong>
   <ul>
     <li>Short circuit terminals (9-10).</li>
-    <li>Connect Multimeter (5-11 and 6-13).</li>
-    <li>Click CHECK.</li>
-    <li>Click ADD to record <ElectricalText text="RTH" />.</li>
+    <li>Connect the Multimeter (5-11 and 6-13).</li>
+    <li>Click CHECK button to verify the connections.</li>
+    <li>Click ADD button to record <ElectricalText text="RTH" />.</li>
     <li>Remove connections (9-10), (5-11), (6-13) by clicking the corresponding terminal labels.</li>
   </ul>
 </li>
@@ -245,13 +249,12 @@ const ActionButtons = ({
       <li {...getInstructionProps('case2')}>
   <strong>Case 2 (Measure <ElectricalText text="VTH" />):</strong>
   <ul>
-    <li>Connect Power Supply (7-9 and 8-10).</li>
-    <li>Connect Voltmeter (1-11 and 2-13).</li>
-    <li>Click CHECK.</li>
-    <li>Turn ON Power Supply.</li>
-    <li>Adjust Voltage.</li>
-    <li>Click ADD to record <ElectricalText text="VTH" />.</li>
-    <li>Remove connections (1-11 and 2-13) by clicking the corresponding terminal labels.</li>
+    <li>Connect the Power Supply (7-9 and 8-10).</li>
+    <li>Connect the Voltmeter (1-11 and 2-13).</li>
+    <li>Click CHECK button to verify the connections.</li>
+    <li>Turn ON the Power Supply and set the desired voltage.</li>
+    <li>Click ADD button to record <ElectricalText text="VTH" />.</li>
+    <li>Remove the connections (1-11 and 2-13) by clicking the corresponding terminal labels.</li>
   </ul>
 </li>
 
@@ -259,11 +262,11 @@ const ActionButtons = ({
         <strong>Case 3 (Measure <ElectricalText text="IL" />):</strong>
         <ul>
 <li>Keep the existing Power Supply connections (7-9 and 8-10) unchanged.</li>
-<li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
-<li>Click CHECK.</li>
+<li>Connect the Ammeter (3-11, 4-12 and 13-14).</li>
+<li>Click CHECK button to verify the connections.</li>
 <li>Turn ON the Power Supply at the same voltage setting used in Case 2.</li>
-<li>Click ADD at 0 Ω to record the first <ElectricalText text="IL" /> and <ElectricalText text="PL" /> values.</li>
-<li>Move the RL slider one division at a time and click ADD at each value: 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω.</li>
+<li>Click ADD button to record the first <ElectricalText text="IL" /> and <ElectricalText text="PL" /> values.</li>
+<li>Move the RL slider one division at a time and click ADD button at each value: 100, 200, 300, 400, 450, 550, 700, 850 and 1000 Ω.</li>
         </ul>
       </li>
     </ol>
@@ -271,20 +274,24 @@ const ActionButtons = ({
 
   <li {...getInstructionProps('step3')}>
     <strong>STEP 3:</strong>{' '}
-    <ElectricalText text="Click CALCULATE to display the power graph and maximum-power calculation." />
+    <ElectricalText text="Click CALCULATE button to verify the theorem." />
   </li>
 
   <li {...getInstructionProps('step4')}>
     <strong>STEP 4:</strong>{' '}
-    <ElectricalText text="Enter VTH and RTH to calculate maximum power, then click VERIFY." />
+    <ElectricalText text="Enter VTH and RTH to calculate maximum power, then click VERIFY button to verify the theorem." />
+  </li>
+
+<li {...getInstructionProps('step5')}>
+    <strong>STEP 6:</strong> Click the Generate Report button to generate the simulation report.
   </li>
 
   <li {...getInstructionProps('step5')}>
-    <strong>STEP 5:</strong> Click PRINT to print the experiment report.
+    <strong>STEP 7:</strong> Click PRINT button to print the experiment report.
   </li>
 
   <li {...getInstructionProps('step6')}>
-    <strong>STEP 6:</strong> Click RESET to restart the experiment.
+    <strong>STEP 8:</strong> Click RESET button to restart the experiment.
   </li>
   <li>
   <strong>Note:</strong> Verified connections are locked and cannot be removed until the current case reading is added to the observation table.
