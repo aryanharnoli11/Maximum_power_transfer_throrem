@@ -1947,7 +1947,7 @@ background:
 
 .site-footer {
   position: absolute;
-  top: 1680px;
+  top: 1675px;
   left: 0;
   width: 1152px;
   padding: 14.4px 19.2px;
@@ -1966,6 +1966,8 @@ background:
   font-size: 0.7em;
   line-height: 0;
 }
+
+
 
 
 /* claculation panel */
@@ -2195,7 +2197,7 @@ background:
   left: 0;
   display: grid;
   width: 1152px;
-  gap: 14.4px;
+  gap: 6.4px;
 }
 
 #calculation-panel.graph-panel--separate {

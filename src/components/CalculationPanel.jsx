@@ -262,11 +262,11 @@ const CalculationPanel = ({
           <section className="maximum-power-formula-card">
             <h3>Maximum Power</h3>
             <div
-              aria-label="Maximum power equals Thevenin voltage squared divided by four times Thevenin resistance"
+              aria-label="Maximum load power equals Thevenin voltage squared divided by four times Thevenin resistance"
               className="maximum-power-equation"
             >
               <span className="maximum-power-equation__lead">
-                P<sub>max</sub> =
+                P<sub>L,max</sub> =
               </span>
 
               <div className="maximum-power-equation__fraction">

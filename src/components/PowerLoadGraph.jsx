@@ -77,9 +77,7 @@ const PowerLoadGraph = ({ observations = [] }) => {
   return (
     <section className="analysis-card power-load-graph-panel" id="power-load-graph-panel">
       <header className="analysis-card__heading">
-        <h2>
-          P<sub>L,max</sub> VS R<sub>L</sub> GRAPH
-        </h2>
+        <h2>POWER VS LOAD RESISTANCE GRAPH</h2>
       </header>
 
       <div className="power-load-graph-panel__body">
